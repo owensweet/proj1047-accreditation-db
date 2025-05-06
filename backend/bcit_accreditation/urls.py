@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from accreditation.views import home #this one we added
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='home'),
 ]
