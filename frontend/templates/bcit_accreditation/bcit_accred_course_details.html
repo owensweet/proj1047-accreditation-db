@@ -1,0 +1,177 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Course Details - BCIT Accreditation System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Course Details</h2>
+    <div>
+        <a href="#" class="btn btn-outline-secondary btn-sm me-2">Back to Courses</a>
+        {% if user.is_staff %}
+        <a href="#" class="btn btn-primary btn-sm">Edit Course</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="card-title mb-0">
+            {{ course.code|default:"COMP3800" }} - {{ course.title|default:"Projects" }}
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Course Code:</dt>
+                    <dd class="col-sm-8">{{ course.code|default:"COMP3800" }}</dd>
+                    
+                    <dt class="col-sm-4">Title:</dt>
+                    <dd class="col-sm-8">{{ course.title|default:"Projects" }}</dd>
+                    
+                    <dt class="col-sm-4">Credits:</dt>
+                    <dd class="col-sm-8">{{ course.credits|default:"4" }}</dd>
+                    
+                    <dt class="col-sm-4">Level:</dt>
+                    <dd class="col-sm-8">{{ course.level|default:"Undergraduate" }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Department:</dt>
+                    <dd class="col-sm-8">{{ course.department|default:"Computing" }}</dd>
+                    
+                    <dt class="col-sm-4">Last Updated:</dt>
+                    <dd class="col-sm-8">{{ course.updated_at|default:"2025-05-07" }}</dd>
+                    
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-success">{{ course.status|default:"Active" }}</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Program:</dt>
+                    <dd class="col-sm-8">{{ course.program|default:"Computer Systems Technology" }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h4>Course Description</h4>
+            <p>{{ course.description|default:"This course provides students with the opportunity to work on real-world projects in a team environment. Students will work with industry clients to identify requirements, develop solutions, and present their work." }}</p>
+        </div>
+
+        <div class="mb-4">
+            <h4>Learning Outcomes</h4>
+            <ul class="list-group">
+                {% if course.learning_outcomes %}
+                    {% for outcome in course.learning_outcomes %}
+                        <li class="list-group-item">{{ outcome.description }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Design and implement solutions to complex problems</li>
+                    <li class="list-group-item">Work effectively in a team environment</li>
+                    <li class="list-group-item">Communicate technical information clearly to stakeholders</li>
+                    <li class="list-group-item">Apply project management principles to software development projects</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Graduate Attributes</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if course.graduate_attributes %}
+                            {% for attribute in course.graduate_attributes %}
+                                <tr>
+                                    <td>{{ attribute.name }}</td>
+                                    <td>{{ attribute.level }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td>Problem Analysis</td>
+                                <td><span class="badge bg-info">High (4/5)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Design</td>
+                                <td><span class="badge bg-info">High (4/5)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Teamwork</td>
+                                <td><span class="badge bg-success">Very High (5/5)</span></td>
+                            </tr>
+                            <tr>
+                                <td>Communication</td>
+                                <td><span class="badge bg-info">High (4/5)</span></td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Assessment Methods</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Assessment</th>
+                            <th>Weight</th>
+                            <th>Learning Outcomes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if course.assessments %}
+                            {% for assessment in course.assessments %}
+                                <tr>
+                                    <td>{{ assessment.name }}</td>
+                                    <td>{{ assessment.weight }}</td>
+                                    <td>{{ assessment.outcomes }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td>Project Proposal</td>
+                                <td>15%</td>
+                                <td>1, 3</td>
+                            </tr>
+                            <tr>
+                                <td>Progress Reports</td>
+                                <td>20%</td>
+                                <td>2, 3, 4</td>
+                            </tr>
+                            <tr>
+                                <td>Final Deliverable</td>
+                                <td>40%</td>
+                                <td>1, 2</td>
+                            </tr>
+                            <tr>
+                                <td>Final Presentation</td>
+                                <td>25%</td>
+                                <td>3</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

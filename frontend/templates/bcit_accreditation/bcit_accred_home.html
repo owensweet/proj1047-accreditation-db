@@ -1,0 +1,46 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Home - BCIT Accreditation System{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded">
+    <h1 class="display-4">Welcome to BCIT Accreditation System</h1>
+    <p class="lead">A comprehensive platform for tracking and managing course accreditation at BCIT.</p>
+    <hr class="my-4">
+    <p>Use this system to document course attributes, manage graduate attributes, and track program outcomes for accreditation purposes.</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Faculty Portal</h5>
+                <p class="card-text">Access your courses and update learning outcomes and assessments.</p>
+                <a href="{% url 'faculty_home' %}" class="btn btn-primary">Go to Faculty Portal</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Course Details</h5>
+                <p class="card-text">Browse courses and their associated accreditation information.</p>
+                <a href="#" class="btn btn-primary">View Courses</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Admin Dashboard</h5>
+                <p class="card-text">Administer the accreditation system (staff only).</p>
+                {% if user.is_staff %}
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">Go to Admin Dashboard</a>
+                {% else %}
+                <a href="#" class="btn btn-secondary disabled">Staff Only</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

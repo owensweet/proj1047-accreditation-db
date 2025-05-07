@@ -1,0 +1,149 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Faculty Portal - BCIT Accreditation System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Faculty Portal</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search courses...">
+            <button class="btn btn-outline-secondary" type="button">Search</button>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Welcome, {{ user.get_full_name|default:"Faculty Member" }}!</h4>
+    <p>This is your portal to manage course accreditation information. You can update course details, learning outcomes, assessment methods, and view accreditation reports.</p>
+    <hr>
+    <p class="mb-0">You have <strong>{{ pending_tasks|default:"3" }} pending tasks</strong> that require your attention.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">My Courses</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Title</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if faculty_courses %}
+                                {% for course in faculty_courses %}
+                                    <tr>
+                                        <td>{{ course.code }}</td>
+                                        <td>{{ course.title }}</td>
+                                        <td>
+                                            <span class="badge {% if course.status == 'Complete' %}bg-success{% elif course.status == 'In Progress' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ course.status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ course.last_updated }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td>COMP3800</td>
+                                    <td>Projects</td>
+                                    <td><span class="badge bg-success">Complete</span></td>
+                                    <td>May 2, 2025</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>COMP2800</td>
+                                    <td>Software Development</td>
+                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                    <td>Apr 29, 2025</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>COMP1800</td>
+                                    <td>Introduction to Programming</td>
+                                    <td><span class="badge bg-danger">Need Update</span></td>
+                                    <td>Mar 15, 2025</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Recent Notifications</h4>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% if notifications %}
+                        {% for notification in notifications %}
+                            <li class="list-group-item">
+                                <strong>{{ notification.date }}</strong>: {{ notification.message }}
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">
+                            <strong>May 5, 2025</strong>: Reminder to update COMP1800 accreditation details.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>May 3, 2025</strong>: New graduate attribute guidelines have been published.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>May 1, 2025</strong>: Your updates for COMP3800 have been approved.
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Apr 28, 2025</strong>: The next accreditation review is scheduled for June 15.
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="#" class="btn btn-sm btn-outline-primary">View All Notifications</a>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Quick Links</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-outline-primary">Update Course Outcomes</a>
+                    <a href="#" class="btn btn-outline-primary">Upload Assessment Materials</a>
+                    <a href="#" class="btn btn-outline-primary">View Accreditation Guidelines</a>
+                    <a href="#" class="btn btn-outline-primary">Generate Course Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
