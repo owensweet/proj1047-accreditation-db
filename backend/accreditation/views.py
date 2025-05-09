@@ -9,6 +9,8 @@ from django.db.models import Q
 import csv
 import io
 from datetime import datetime
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
 
 # Import models
 from .models import (
@@ -26,10 +28,10 @@ from .utils import get_cell
 
 # Check if user is admin
 def is_admin(user):
-    """Check if a user has admin privileges through staff status or role"""
+    """Check if a user has admin or superuser privileges through role"""
     if hasattr(user, 'profile'):
-        return user.is_staff or user.is_superuser or user.profile.role == 'admin'
-    return user.is_staff or user.is_superuser
+        return user.profile.role == 'admin' # replace with group check instead
+    return user.is_superuser
 
 # Redirect to login if not authenticated
 def login_view(request):
@@ -40,6 +42,33 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
     return render(request, 'bcit_accreditation/bcit_accred_login.html')
+
+def login_user(request):
+    """
+    Login form post request using django authentication and hashing
+    """
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid username or password.")
+            return render(request, "bcit_accreditation/bcit_accred_login.html")
+    return render(request, "bcit_accreditation/bcit_accred_login.html")
+
+def logout_user(request):
+    """
+    Logout post request
+    """
+    logout(request)
+    return redirect('login')
+
+
+# ALL FOLLOWING VIEWS MUST HAVE LOGIN_REQUIRED DECORATOR
 
 @login_required
 def home_view(request):

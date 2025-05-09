@@ -12,7 +12,7 @@ class Department(models.Model):
 
 class Program(models.Model):
     """Program model for organizing courses and accreditation"""
-    name = models.CharField(max_length=q100)
+    name = models.CharField(max_length=100)
     code = models.CharField(max_length=20, unique=True)
     description = models.TextField(blank=True, null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='programs')
@@ -137,13 +137,13 @@ class CSVUpload(models.Model):
     def __str__(self):
         return f"{self.file_name} - {self.file_type} ({self.status})"
 
+
+# delete this later, extended user profile is most likely not needed and could be redundant with the permission groups
 class UserProfile(models.Model):
     """Extended user profile for additional user information"""
     ROLE_CHOICES = [
         ('admin', 'Administrator'),
-        ('faculty', 'Faculty Member'),
-        ('staff', 'Staff Member'),
-        ('viewer', 'Viewer'),
+        ('faculty', 'Faculty Member'),  
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
