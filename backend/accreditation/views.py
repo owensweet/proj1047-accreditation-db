@@ -21,6 +21,8 @@ from .models import (
     CourseGraduateAttribute,
     AssessmentMethod
 )
+from .utils import get_cell
+
 
 # Check if user is admin
 def is_admin(user):
@@ -100,32 +102,49 @@ def test_upload_view(request):
     """
     if request.method == 'POST' and request.FILES.get('csv_file'):
         csv_file = request.FILES['csv_file']
-        # Check if file is a CSV
         if not csv_file.name.endswith('.csv'):
             return JsonResponse({'success': False, 'message': 'File is not a CSV'})
-        
+
         try:
-            # Access the file content - this will be where your colleague's function would be called
-            file_content = csv_file.read()
-            
-            # Here, you would typically call your colleague's CSV processing function:
-            # Example: result = your_colleagues_csv_function(file_content)
-            
-            # For testing that the file is properly uploaded and accessible
-            row_count = file_content.decode('utf-8').count('\n')
-            
+            file_content = csv_file.read().decode('utf-8')
+            csvfile = io.StringIO(file_content)
+            rows = list(csv.reader(csvfile))
+
+            program = get_cell(rows, 3, 'D')
+            course = get_cell(rows, 4, 'D')
+            term = get_cell(rows, 5, 'D')
+            ga = get_cell(rows, 8, 'D')
+            gai = get_cell(rows, 9, 'D')
+            instr_level = get_cell(rows, 10, 'D')
+            clos = get_cell(rows, 11, 'D')
+            assess_type = get_cell(rows, 12, 'D')
+            assess_weight = get_cell(rows, 13, 'D')
+
+            row_count = len(rows)
+
             return JsonResponse({
-                'success': True, 
-                'message': f'File successfully uploaded! Found approximately {row_count} rows of data.',
+                'success': True,
+                'message': f'File uploaded. Found {row_count} rows.',
                 'file_name': csv_file.name,
-                'file_size': csv_file.size
+                'file_size': csv_file.size,
+                'extracted': {
+                    'program': program,
+                    'course': course,
+                    'term': term,
+                    'graduate_attribute': ga,
+                    'gai': gai,
+                    'instructional_level': instr_level,
+                    'clos': clos,
+                    'assessment_type': assess_type,
+                    'assessment_weight': assess_weight
+                }
             })
         except Exception as e:
             return JsonResponse({
-                'success': False, 
+                'success': False,
                 'message': f'Error processing file: {str(e)}'
             })
-    
+
     return render(request, 'bcit_accreditation/test.html')
 
 @login_required
