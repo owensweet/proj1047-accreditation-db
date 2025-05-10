@@ -22,7 +22,10 @@
                         <span>Welcome, {{ user.username }}</span> | 
                         <a href="{% url 'logout' %}" class="text-white">Logout</a>
                     {% else %}
-                        <a href="{% url 'login' %}" class="text-white">Login</a>
+                        <div class="d-flex flex-column align-items-end">
+                            <a href="{% url 'login' %}" class="text-white">Login</a>
+                            <a href="{% url 'register' %}" class="text-white">Register</a>
+                        </div>
                     {% endif %}
                 </div>
             </div>

@@ -11,8 +11,11 @@ import io
 from datetime import datetime
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
-# Import models
+# Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
     Department, 
     Program, 
@@ -59,6 +62,54 @@ def login_user(request):
             messages.error(request, "Invalid username or password.")
             return render(request, "bcit_accreditation/bcit_accred_login.html")
     return render(request, "bcit_accreditation/bcit_accred_login.html")
+
+def register_view(request):
+    """
+    Display and process the register page
+    """
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request, 'bcit_accreditation/bcit_accred_register.html')
+
+def register_user(request):
+    """
+    Register post request, handling logic and adding to database
+    """
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        # Handling both entered passwords
+        if password1 != password2:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'bcit_accreditation/bcit_accred_register.html')
+        
+        # Use django password validator
+        try:
+            validate_password(password1)  # Run all Django password validators
+        except ValidationError as e:
+            for error in e:
+                messages.error(request, error)
+            return render(request, "bcit_accreditation/bcit_accred_register.html")
+
+        # Handling username already existing
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already taken.')
+            return render(request, 'bcit_accreditation/bcit_accred_register.html')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered.')
+            return render(request, 'bcit_accreditation/bcit_accred_register.html')
+
+        # Create user and save it in the database
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        user.save()
+        login(request, user)
+        return redirect('home')
+
+    return render(request, 'bcit_accreditation/bcit_accred_register.html')
 
 def logout_user(request):
     """
