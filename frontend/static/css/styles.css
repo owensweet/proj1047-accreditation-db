@@ -5,6 +5,16 @@
     --bcit-blue: #0057a6;
     --bcit-red: #c4122f;
     --bcit-dark: #1c1c1c;
+
+
+    --main-accent: #173d68;
+    --secondary-accent: #4A4646;
+    --light-accent: #FAF0E6;
+    --dark-accent: #242124;
+    --green: #77DD77;
+    --yellow: #FFE357;
+    --red: #FF3F3F;
+    --form: #4A4646;
 }
 
 /* General styling */
