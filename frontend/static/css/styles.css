@@ -1,11 +1,10 @@
-/* Main Styles for BCIT Accreditation System */
-
-/* Custom variables */
+/* ========================
+   Custom Variables
+========================= */
 :root {
     --bcit-blue: #0057a6;
     --bcit-red: #c4122f;
     --bcit-dark: #1c1c1c;
-
 
     --main-accent: #173d68;
     --secondary-accent: #4A4646;
@@ -17,23 +16,111 @@
     --form: #4A4646;
 }
 
-/* General styling */
+/* ========================
+   Global Body Styling
+========================= */
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
     line-height: 1.6;
 }
 
-.navbar {
-    border-bottom: 1px solid #dee2e6;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+/* Used to stretch main content to push footer to bottom */
+.flex-grow-1 {
+    flex-grow: 1;
 }
 
-.navbar .nav-link {
+/* ========================
+   Header Styling
+========================= */
+.main-header {
+    background-color: var(--bcit-blue);
+    color: white;
+    padding: 0.6rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.main-header h1 {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.auth-buttons a {
+    margin-left: 0.5rem;
+    color: var(--bcit-blue);
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 2px solid var(--bcit-blue);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+}
+
+.auth-buttons a:hover {
+    background-color: var(--bcit-blue);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========================
+   Navigation Bar Styling
+========================= */
+.main-nav {
+    background-color: var(--main-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.nav-title {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: white;
     font-weight: 500;
+    text-decoration: none;
 }
 
-/* Card enhancements */
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* ========================
+   Container for Page Content
+========================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ========================
+   Card Styling
+========================= */
 .card {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     transition: box-shadow 0.3s ease;
@@ -47,7 +134,9 @@ body {
     font-weight: 500;
 }
 
-/* Button styling */
+/* ========================
+   Button Styling
+========================= */
 .btn-primary {
     background-color: var(--bcit-blue);
     border-color: var(--bcit-blue);
@@ -58,61 +147,97 @@ body {
     border-color: #004080;
 }
 
-/* Table enhancements */
+/* ========================
+   Form Input Styling with Thicker Borders
+========================= */
+.form-control {
+    padding: 1rem;
+    background-color: #004080;
+    border: 4px solid #ccc; /* Increased border thickness */
+    border-radius: 8px;
+    font-size: 1.05rem;
+    color: white;
+    width: 100%;
+}
+
+.form-control::placeholder {
+    color: #d0d0d0;
+}
+
+.form-control:focus {
+    border-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3); /* Increased box-shadow thickness */
+    background-color: #003366;
+}
+
+/* ========================
+   Table Styling
+========================= */
 .table th {
     border-top: none;
     background-color: #f8f9fa;
 }
 
-/* Form styling */
-.form-control:focus {
-    border-color: var(--bcit-blue);
-    box-shadow: 0 0 0 0.25rem rgba(0, 87, 166, 0.25);
-}
-
-/* Custom dashboard cards */
-.stats-card {
-    border-left: 4px solid var(--bcit-blue);
-}
-
-/* Footer styling */
-footer {
-    margin-top: 2rem;
-}
-
-/* Alert styling */
+/* ========================
+   Alert Styling
+========================= */
 .alert-info {
     border-left: 5px solid var(--bcit-blue);
 }
 
-/* Badge customization */
+/* ========================
+   Badge Styling
+========================= */
 .badge {
     font-weight: 500;
     padding: 0.35em 0.65em;
 }
 
-/* Responsive adjustments */
+/* ========================
+   Footer Styling
+========================= */
+.main-footer {
+    background-color: var(--bcit-blue);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 400;
+}
+
+/* ========================
+   Responsive Tweaks
+========================= */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
     }
-    
+
     .display-4 {
         font-size: 2.5rem;
     }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-end;
+    }
 }
 
-/* Print styles */
+/* ========================
+   Print Tweaks
+========================= */
 @media print {
     .no-print {
         display: none;
     }
-    
+
     .card {
         box-shadow: none;
         border: 1px solid #ddd;
     }
-    
+
     body {
         font-size: 12pt;
     }

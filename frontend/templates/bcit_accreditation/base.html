@@ -2,82 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}BCIT Accreditation System{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header class="bg-dark text-white p-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h1>BCIT Accreditation System</h1>
-                </div>
-                <div class="col-md-6 text-end">
-                    {% if user.is_authenticated %}
-                        <span>Welcome, {{ user.username }}</span> | 
-                        <a href="{% url 'logout' %}" class="text-white">Logout</a>
-                    {% else %}
-                        <div class="d-flex flex-column align-items-end">
-                            <a href="{% url 'login' %}" class="text-white">Login</a>
-                            <a href="{% url 'register' %}" class="text-white">Register</a>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
+
+<!-- HEADER START -->
+<header class="main-header">
+    <div class="header-content">
+        <h1>BCIT Accreditation System</h1>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                <span>Welcome, {{ user.username }}</span>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
         </div>
-    </header>
+    </div>
+</header>
+<!-- HEADER END -->
 
-    {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                    {% if user.is_staff or user.role == 'admin' %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'test_upload' %}">CSV Upload Test</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    {% endif %}
+<!-- NAVIGATION START -->
+{% if user.is_authenticated %}
+<nav class="main-nav">
+    <div class="nav-title">Navigation</div>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_staff or user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        {% endif %}
+        <a href="{% url 'test_upload' %}">CSV Upload Test</a>
+    </div>
+</nav>
+{% endif %}
+<!-- NAVIGATION END -->
 
-    <main class="container my-4">
-        {% block content %}
-        {% endblock %}
-    </main>
+<!-- MAIN CONTENT START -->
+<main class="flex-grow-1">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+<!-- MAIN CONTENT END -->
 
-    <footer class="bg-dark text-white p-3 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p>&copy; {% now "Y" %} BCIT Accreditation System</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <p>Developed for COMP3800</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+<!-- FOOTER START -->
+<footer class="main-footer">
+    <p>&copy; {% now "Y" %} BCIT Accreditation System</p>
+    <p>Developed for COMP3800</p>
+</footer>
+<!-- FOOTER END -->
 
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    {% block extra_js %}{% endblock %}
+{% block extra_js %}{% endblock %}
 </body>
 </html>
