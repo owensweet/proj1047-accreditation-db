@@ -17,14 +17,12 @@ from django.core.exceptions import ValidationError
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
-    Department, 
-    Program, 
-    Course, 
-    CSVUpload,
-    LearningOutcome,
-    GraduateAttribute,
-    CourseGraduateAttribute,
-    AssessmentMethod
+    DataProcess,
+    FacultyCI,
+    ProgramCI,
+    AssessValidity,
+    AccredReport,
+    AnnualReport
 )
 from .utils import get_cell
 
