@@ -171,6 +171,19 @@ body {
     background-color: #003366;
 }
 
+/* Custom styling for login page input borders */
+.input-thick-border {
+    border-width: 4px !important; 
+    border-color: #0057a6 !important;
+    border-radius: 8px !important;
+}
+
+/* Style focus state */
+.input-thick-border:focus {
+    box-shadow: 0 0 0 3px rgba(0, 87, 166, 0.3) !important;
+    outline: none !important;
+}
+
 /* ========================
    Table Styling
 ========================= */
