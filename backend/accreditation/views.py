@@ -261,23 +261,16 @@ def form_step2_view(request):
 @login_required
 def form_step3_view(request):
     """
-    Display the third step of the form
+    Display the third step of the form (comments & confirmation)
     """
-    return render(request, 'bcit_accreditation/bcit_accred_f3_assessment_comment.html')
-
-@login_required
-def form_step4_view(request):
-    """
-    Display the fourth step of the form
-    """
-    return render(request, 'bcit_accreditation/bcit_accred_f4_data_and_confirmation.html')
+    return render(request, 'bcit_accreditation/bcit_accred_f3_comment_and_confirmation.html')
 
 @login_required
 def form_success_view(request):
     """
     Display the success page after form submission
     """
-    return render(request, 'bcit_accreditation/bcit_accred_f5_successful_upload.html')
+    return render(request, 'bcit_accreditation/bcit_accred_f4_successful_upload.html')
 
 @login_required
 def form_submit_view(request):

@@ -18,7 +18,7 @@ urlpatterns = [
     path('form/step1/', views.form_step1_view, name='form_step1'),
     path('form/step2/', views.form_step2_view, name='form_step2'),
     path('form/step3/', views.form_step3_view, name='form_step3'),
-    path('form/step4/', views.form_step4_view, name='form_step4'),
+    # path('form/step4/', views.form_step4_view, name='form_step4'),
     path('form/success/', views.form_success_view, name='form_success'),
     path('form/submit/', views.form_submit_view, name='form_submit'),
     

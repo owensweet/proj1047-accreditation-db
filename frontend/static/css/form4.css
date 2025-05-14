@@ -8,6 +8,17 @@
     font-family: Arial, sans-serif;
 }
 
+.f4container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
 /* Section Headers */
 .section-header {
     width: 100%;
@@ -169,5 +180,50 @@
 
 .submit-button {
     background-color: #2A68F6;
-   
+}
+
+/* Success Message */
+.success-container {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+}
+
+.success-container h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Home Button */
+.home-button-container {
+    margin-top: 30px;
+}
+
+.home-button {
+    display: inline-block;
+    background-color: #173d68;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+}
+
+.home-button:hover {
+    background-color: #2970d5;
+    transform: translateY(-6px);
+}
+
+.home-button:active {
+    background-color: #0b1f37;
+    transform: translateY(1px);
 }

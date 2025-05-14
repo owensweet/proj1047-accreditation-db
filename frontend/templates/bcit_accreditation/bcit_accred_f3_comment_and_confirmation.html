@@ -1,14 +1,14 @@
 {% extends 'bcit_accreditation/base.html' %}
 {% load static %}
 
-{% block title %}Data Confirmation - BCIT Accreditation System{% endblock %}
+{% block title %}Assessment Comments & Confirmation - BCIT Accreditation System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/form3.css' %}">
+{% endblock %}
 
 {% block content %}
-<!-- CSS Link if base.html doesn't include it -->
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/form4.css' %}">
-
-<div class="page-container">
+<div class="f3container">
     <!-- CSV Upload Heading Container -->
     <div class="section-header">
         <h2 class="heading">Upload CSV file (Excel)</h2>
@@ -31,9 +31,29 @@
     <!-- Data Confirmation Container -->
     <div class="data-container">
         <div id="userData" class="user-data">
-            <!-- Data from F1, F2, F3 will be displayed here -->
+            <!-- Data from F1, F2 will be displayed here -->
             <p class="loading-text">Loading your data...</p>
         </div>
+    </div>
+
+    <!-- Comments Heading Container -->
+    <div class="section-header">
+        <h2 class="heading">Additional info about assessment</h2>
+    </div>
+
+    <!-- Comments Container -->
+    <div class="comments-container">
+        <form id="assessmentCommentForm">
+            <!-- Hidden input to store form data across pages -->
+            <input type="hidden" id="formData" class="form-storage">
+            {% csrf_token %}
+
+            <div class="comment-field">
+                <label for="assessmentComments">Comments on the assessment results</label>
+                <textarea id="assessmentComments" name="assessmentComments" maxlength="500" placeholder="If the results indicate a high percentage of students marginally meeting or below expectations, please comment on whether any changes or resources are required for students to succeed. [DNI]" required></textarea>
+                <div class="char-counter"><span id="commentsCounter">0</span>/500</div>
+            </div>
+        </form>
     </div>
 
     <!-- Action Buttons -->
@@ -47,12 +67,38 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Comment fields
+        const commentsField = document.getElementById('assessmentComments');
+        const commentsCounter = document.getElementById('commentsCounter');
+        
+        // CSV file handling
         const csvFileInput = document.getElementById('csvFile');
         const csvFileInfo = document.querySelector('.file-info');
         const userData = document.getElementById('userData');
+        
+        // Buttons
         const backButton = document.getElementById('backButton');
         const submitButton = document.getElementById('submitButton');
 
+        // Set up character counting for comments
+        function updateCharCounter() {
+            commentsCounter.textContent = commentsField.value.length;
+        }
+        
+        // Add input listener to update character count
+        commentsField.addEventListener('input', updateCharCounter);
+        
+        // Load previously stored comment data if available
+        if (sessionStorage.getItem('f3FormData')) {
+            const storedData = JSON.parse(sessionStorage.getItem('f3FormData'));
+            
+            if (storedData.assessmentComments) {
+                commentsField.value = storedData.assessmentComments;
+                updateCharCounter();
+            }
+        }
+
+        // CSV file change handler
         csvFileInput.addEventListener('change', function(e) {
             if (this.files && this.files[0]) {
                 const file = this.files[0];
@@ -70,10 +116,10 @@
             }
         });
 
+        // Load user data from previous steps
         function loadUserData() {
             const f1Data = JSON.parse(sessionStorage.getItem('f1FormData') || '{}');
             const f2Data = JSON.parse(sessionStorage.getItem('f2FormData') || '{}');
-            const f3Data = JSON.parse(sessionStorage.getItem('f3FormData') || '{}');
 
             let html = '<div>';
 
@@ -108,44 +154,57 @@
             } else {
                 html += '<p>No assessment information available</p>';
             }
-            html += '</div>';
-
-            html += '<h3>Assessment Comments</h3><div>';
-            if (Object.keys(f3Data).length > 0) {
-                html += `<div><span>Comments:</span> <span>${f3Data.assessmentComments || ''}</span></div>`;
-            } else {
-                html += '<p>No assessment comments available</p>';
-            }
             html += '</div></div>';
 
             userData.innerHTML = html;
         }
 
+        // Load the user data
         loadUserData();
 
+        // Handle back button
         backButton.addEventListener('click', function() {
-            window.location.href = '{% url "form_step3" %}';
+            // Save comment data before navigating
+            const commentData = {
+                assessmentComments: commentsField.value
+            };
+            sessionStorage.setItem('f3FormData', JSON.stringify(commentData));
+            
+            // Navigate back to F2
+            window.location.href = '{% url "form_step2" %}';
         });
 
+        // Handle submit button
         submitButton.addEventListener('click', function() {
+            // Check if CSV file is uploaded
             if (!csvFileInput.files || !csvFileInput.files[0]) {
                 alert('Please upload a CSV file first');
                 return;
             }
 
+            // Save comment data
+            const commentData = {
+                assessmentComments: commentsField.value
+            };
+            sessionStorage.setItem('f3FormData', JSON.stringify(commentData));
+
+            // Prepare form data for submission
             const formData = new FormData();
             formData.append('csv_file', csvFileInput.files[0]);
 
+            // Combine all data from F1, F2, and F3
             const allData = {
                 ...JSON.parse(sessionStorage.getItem('f1FormData') || '{}'),
                 ...JSON.parse(sessionStorage.getItem('f2FormData') || '{}'),
-                ...JSON.parse(sessionStorage.getItem('f3FormData') || '{}')
+                ...commentData
             };
 
+            // Add all data to the form
             for (const key in allData) {
                 formData.append(key, allData[key]);
             }
 
+            // Submit to the server
             fetch('{% url "form_submit" %}', {
                 method: 'POST',
                 body: formData,
@@ -157,7 +216,7 @@
             .then(data => {
                 if (data.success) {
                     sessionStorage.clear();
-                    window.location.href = '{% url "form_success" %}';
+                    window.location.href = '{% url "form_success" %}';  // Reference the new f4 page
                 } else {
                     alert('Error: ' + data.message);
                 }
