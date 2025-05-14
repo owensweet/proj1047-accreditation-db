@@ -84,7 +84,8 @@ def register_user(request):
         
         # Use django password validator
         try:
-            validate_password(password1)  # Run all Django password validators
+            # Uses all of django's password validators to check password
+            validate_password(password1)
         except ValidationError as e:
             for error in e:
                 messages.error(request, error)
@@ -167,3 +168,20 @@ def test_upload_view(request):
             })
 
     return render(request, 'bcit_accreditation/test.html')
+
+@login_required
+@user_passes_test(is_admin)
+def admin_dashboard_view(request):
+    """
+    Display the admin dashboard (admin only)
+    """
+    # Get counts for dashboard stats
+    context = {
+        'total_courses': Course.objects.count(),
+        'total_departments': Department.objects.count(),
+        'pending_updates': Course.objects.filter(accreditation_status='pending').count(),
+        'required_actions': CSVUpload.objects.filter(status='failed').count() + CSVUpload.objects.filter(status='processing').count(),
+        'recent_uploads': CSVUpload.objects.all()[:5],
+        'recent_courses': Course.objects.all().order_by('-updated_at')[:5]
+    }
+    return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
