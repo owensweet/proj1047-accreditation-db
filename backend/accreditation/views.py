@@ -23,7 +23,6 @@ from .models import (
     AccredReport,
     AnnualReport
 )
-from .utils import get_cell
 
 
 # Check if user is admin
