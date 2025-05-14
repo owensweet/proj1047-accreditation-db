@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+import openpyxl
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
@@ -130,40 +131,58 @@ def home_view(request):
 @login_required
 def test_upload_view(request):
     """
-    Handle CSV file upload test page (requires authentication)
+    Handle CSV or XLSX file upload and extract student data.
     """
     if request.method == 'POST' and request.FILES.get('csv_file'):
-        csv_file = request.FILES['csv_file']
-        if not csv_file.name.endswith('.csv'):
-            return JsonResponse({'success': False, 'message': 'File is not a CSV'})
+        uploaded_file = request.FILES['csv_file']
+        file_name = uploaded_file.name.lower()
 
         try:
-            file_content = csv_file.read().decode('utf-8')
-            csvfile = io.StringIO(file_content)
-            rows = list(csv.reader(csvfile))
+            # Convert uploaded file to rows: list of lists
+            if file_name.endswith('.csv'):
+                file_content = uploaded_file.read().decode('utf-8')
+                csvfile = io.StringIO(file_content)
+                rows = list(csv.reader(csvfile))
 
+            elif file_name.endswith('.xlsx'):
+                wb = openpyxl.load_workbook(uploaded_file, data_only=True)
+                sheet = wb.active
+                csv_buffer = io.StringIO()
+                csv_writer = csv.writer(csv_buffer)
+                for row in sheet.iter_rows(values_only=True):
+                    csv_writer.writerow(row)
+                csv_buffer.seek(0)
+                rows = list(csv.reader(csv_buffer))
+
+            else:
+                return JsonResponse({'success': False, 'message': 'Unsupported file type. Please upload a .csv or .xlsx file.'})
+
+            # Extract data starting from row 4 (index 3)
             extracted_data = []
 
             for row in rows[3:]:
                 try:
                     student_id = row[1].strip() if row[1] else None
-                    gai_score = row[2].strip() if row[2] else None
-                    if student_id and gai_score:
-                        extracted_data.append((student_id, gai_score))
+                    gai_score_raw = str(row[2]).strip() if row[2] else None
+
+                    if student_id and len(student_id) == 9:
+                        try:
+                            gai_score = int(gai_score_raw)
+                            extracted_data.append((student_id, gai_score))
+                        except ValueError:
+                            continue  # Skip rows with invalid GAI scores
                 except IndexError:
-                    continue
+                    continue  # Skip incomplete rows
 
             return JsonResponse({
                 'success': True,
-                'message': f'File uploaded and data extracted.',
-                'file_name': csv_file.name,
-                'file_size': csv_file.size,
+                'message': 'File uploaded and data extracted.',
+                'file_name': uploaded_file.name,
+                'file_size': uploaded_file.size,
                 'extracted': extracted_data
             })
+
         except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'message': f'Error processing file: {str(e)}'
-            })
+            return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
     return render(request, 'bcit_accreditation/test.html')
