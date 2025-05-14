@@ -4,42 +4,47 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+<link rel="stylesheet" href="{% static 'css/form1.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="f2container">
-    <!-- Heading Container -->
-    <div class="heading-container">
+<div class="container">
+    <!-- Form Wrapper -->
+    <div class="form-wrapper">
         <h2>Additional info about assessment</h2>
-    </div>
-
-    <!-- Form Container -->
-    <div class="form-container">
+        
         <form id="assessmentInfoForm">
             <!-- Hidden input to store form data across pages -->
             <input type="hidden" id="formData" class="form-storage">
             {% csrf_token %}
 
-            <div class="f2-form-field">
-                <label for="assessmentTitle">Assessment title</label>
-                <input type="text" id="assessmentTitle" name="assessmentTitle" maxlength="150" placeholder="e.g. Lab 3 - Circuit Analysis" required>
-                <div class="char-counter"><span id="assessmentTitleCounter">0</span>/150</div>
+            <div class="form-grid">
+                <!-- Assessment Title Field -->
+                <div class="form-column">
+                    <label for="assessmentTitle">Assessment title</label>
+                    <input type="text" id="assessmentTitle" name="assessmentTitle" maxlength="150" placeholder="e.g. Lab 3 - Circuit Analysis" required>
+                    <div><span id="assessmentTitleCounter">0</span>/150</div>
+                </div>
+
+                <!-- Assessment Description Field -->
+                <div class="form-column">
+                    <label for="assessmentDescription">Assessment description</label>
+                    <textarea id="assessmentDescription" name="assessmentDescription" maxlength="250" placeholder="Provide here a short description of the assessment [DNI]" required></textarea>
+                    <div><span id="assessmentDescriptionCounter">0</span>/250</div>
+                </div>
             </div>
 
-            <div class="f2-form-field">
-                <label for="assessmentDescription">Assessment description</label>
-                <textarea id="assessmentDescription" name="assessmentDescription" maxlength="250" placeholder="Provide here a short description of the assessment [DNI]" required></textarea>
-                <div class="char-counter"><span id="assessmentDescriptionCounter">0</span>/250</div>
+            <div class="form-grid">
+                <!-- Question Text Field -->
+                <div class="form-column">
+                    <label for="questionText">Question text</label>
+                    <textarea id="questionText" name="questionText" maxlength="500" placeholder="Provide here the text of the requirement in the assessment. Limit description to 800 characters [DNI]" required></textarea>
+                    <div><span id="questionTextCounter">0</span>/500</div>
+                </div>
             </div>
 
-            <div class="f2-form-field">
-                <label for="questionText">Question text</label>
-                <textarea id="questionText" name="questionText" maxlength="500" placeholder="Provide here the text of the requirement in the assessment. Limit description to 800 characters [DNI]" required></textarea>
-                <div class="char-counter"><span id="questionTextCounter">0</span>/500</div>
-            </div>
-
-            <div class="form-actions">
+            <!-- Button Row -->
+            <div class="button-row">
                 <button type="button" id="backButton">Previous Page</button>
                 <button type="submit" id="nextButton">Next Page</button>
             </div>

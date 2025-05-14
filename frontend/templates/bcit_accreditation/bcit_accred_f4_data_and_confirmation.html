@@ -1,45 +1,45 @@
 {% extends 'bcit_accreditation/base.html' %}
+{% load static %}
 
 {% block title %}Data Confirmation - BCIT Accreditation System{% endblock %}
 
-{% block extra_css %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
-{% endblock %}
-
 {% block content %}
-<div class="f4container">
+<!-- CSS Link if base.html doesn't include it -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/form4.css' %}">
+
+<div class="page-container">
     <!-- CSV Upload Heading Container -->
-    <div class="heading-container">
-        <h2>Upload CSV file (Excel)</h2>
+    <div class="section-header">
+        <h2 class="heading">Upload CSV file (Excel)</h2>
     </div>
 
     <!-- CSV Upload Container -->
-    <div class="csv-upload-container">
-        <div class="csv-upload-area">
-            <input type="file" id="csvFile" name="csvFile" accept=".csv" class="csv-file-input" required>
-            <label for="csvFile" class="csv-file-label">Click to select CSV file</label>
-            <div class="csv-file-info">No file selected</div>
+    <div class="upload-container">
+        <div class="file-upload">
+            <input type="file" id="csvFile" name="csvFile" accept=".csv" required class="file-input">
+            <label for="csvFile" class="file-label">Click to select CSV file</label>
+            <div class="file-info">No file selected</div>
         </div>
     </div>
 
     <!-- Confirmation Heading Container -->
-    <div class="heading-container">
-        <h2>Confirm Data</h2>
+    <div class="section-header">
+        <h2 class="heading">Confirm Data</h2>
     </div>
 
     <!-- Data Confirmation Container -->
-    <div class="data-confirm-container">
-        <div id="userData">
+    <div class="data-container">
+        <div id="userData" class="user-data">
             <!-- Data from F1, F2, F3 will be displayed here -->
-            <p class="loading-data">Loading your data...</p>
+            <p class="loading-text">Loading your data...</p>
         </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="form-actions">
-        <button type="button" id="backButton">Previous Page</button>
-        <button type="button" id="submitButton">Submit</button>
+    <div class="button-group">
+        <button type="button" id="backButton" class="button back-button">Previous Page</button>
+        <button type="button" id="submitButton" class="button submit-button">Submit</button>
     </div>
 </div>
 {% endblock %}
@@ -47,23 +47,17 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Reference to elements
         const csvFileInput = document.getElementById('csvFile');
-        const csvFileInfo = document.querySelector('.csv-file-info');
+        const csvFileInfo = document.querySelector('.file-info');
         const userData = document.getElementById('userData');
         const backButton = document.getElementById('backButton');
         const submitButton = document.getElementById('submitButton');
-        
-        // CSV file handling
+
         csvFileInput.addEventListener('change', function(e) {
             if (this.files && this.files[0]) {
                 const file = this.files[0];
                 csvFileInfo.textContent = `Selected file: ${file.name} (${Math.round(file.size / 1024)} KB)`;
-                
-                // Store file info in session storage
                 sessionStorage.setItem('csvFileName', file.name);
-                
-                // Read the file as text
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     sessionStorage.setItem('csvFileContent', e.target.result);
@@ -75,102 +69,83 @@
                 sessionStorage.removeItem('csvFileContent');
             }
         });
-        
-        // Load data from previous pages
+
         function loadUserData() {
-            // Get data from session storage
             const f1Data = JSON.parse(sessionStorage.getItem('f1FormData') || '{}');
             const f2Data = JSON.parse(sessionStorage.getItem('f2FormData') || '{}');
             const f3Data = JSON.parse(sessionStorage.getItem('f3FormData') || '{}');
-            
-            // Create HTML to display all the data
-            let html = '<div class="user-data-section">';
-            
-            // F1 data
-            html += '<h3>Course and GA Information</h3>';
-            html += '<div class="data-table">';
+
+            let html = '<div>';
+
+            html += '<h3>Course and GA Information</h3><div>';
             if (Object.keys(f1Data).length > 0) {
-                html += `<div class="data-row"><span>Program:</span> <span>${f1Data.program || ''}</span></div>`;
-                html += `<div class="data-row"><span>Course:</span> <span>${f1Data.course || ''}</span></div>`;
-                html += `<div class="data-row"><span>Academic Term:</span> <span>${f1Data.academicTerm || ''}</span></div>`;
-                html += `<div class="data-row"><span>Program Term:</span> <span>${f1Data.programTerm || ''}</span></div>`;
-                html += `<div class="data-row"><span>Faculty Name 1:</span> <span>${f1Data.facultyFirstName1 || ''}</span></div>`;
-                html += `<div class="data-row"><span>Faculty Name 2:</span> <span>${f1Data.facultyFirstName2 || ''}</span></div>`;
-                html += `<div class="data-row"><span>Graduate Attribute:</span> <span>${f1Data.graduateAttribute || ''}</span></div>`;
-                html += `<div class="data-row"><span>Graduate Attribute Indicator:</span> <span>${f1Data.graduateAttributeIndicator || ''}</span></div>`;
-                html += `<div class="data-row"><span>Instructional Level:</span> <span>${f1Data.instructionalLevel || ''}</span></div>`;
-                html += `<div class="data-row"><span>Assessment Alignment:</span> <span>${f1Data.assessmentAlignment || ''}</span></div>`;
-                html += `<div class="data-row"><span>Course Learning Outcomes:</span> <span>${f1Data.courseLearningOutcomes || ''}</span></div>`;
-                html += `<div class="data-row"><span>Assessment Type:</span> <span>${f1Data.assessmentType || ''}</span></div>`;
-                html += `<div class="data-row"><span>Course Weighting:</span> <span>${f1Data.courseWeighting || ''}</span></div>`;
-                html += `<div class="data-row"><span>Assessment Max Score:</span> <span>${f1Data.assessmentMaxScore || ''}</span></div>`;
-                html += `<div class="data-row"><span>GAI Weight:</span> <span>${f1Data.gaiWeight || ''}</span></div>`;
-                html += `<div class="data-row"><span>GAI Max Points:</span> <span>${f1Data.gaiMaxPoints || ''}</span></div>`;
+                html += `<div><span>Program:</span> <span>${f1Data.program || ''}</span></div>`;
+                html += `<div><span>Course:</span> <span>${f1Data.course || ''}</span></div>`;
+                html += `<div><span>Academic Term:</span> <span>${f1Data.academicTerm || ''}</span></div>`;
+                html += `<div><span>Program Term:</span> <span>${f1Data.programTerm || ''}</span></div>`;
+                html += `<div><span>Faculty Name 1:</span> <span>${f1Data.facultyFirstName1 || ''}</span></div>`;
+                html += `<div><span>Faculty Name 2:</span> <span>${f1Data.facultyFirstName2 || ''}</span></div>`;
+                html += `<div><span>Graduate Attribute:</span> <span>${f1Data.graduateAttribute || ''}</span></div>`;
+                html += `<div><span>Graduate Attribute Indicator:</span> <span>${f1Data.graduateAttributeIndicator || ''}</span></div>`;
+                html += `<div><span>Instructional Level:</span> <span>${f1Data.instructionalLevel || ''}</span></div>`;
+                html += `<div><span>Assessment Alignment:</span> <span>${f1Data.assessmentAlignment || ''}</span></div>`;
+                html += `<div><span>Course Learning Outcomes:</span> <span>${f1Data.courseLearningOutcomes || ''}</span></div>`;
+                html += `<div><span>Assessment Type:</span> <span>${f1Data.assessmentType || ''}</span></div>`;
+                html += `<div><span>Course Weighting:</span> <span>${f1Data.courseWeighting || ''}</span></div>`;
+                html += `<div><span>Assessment Max Score:</span> <span>${f1Data.assessmentMaxScore || ''}</span></div>`;
+                html += `<div><span>GAI Weight:</span> <span>${f1Data.gaiWeight || ''}</span></div>`;
+                html += `<div><span>GAI Max Points:</span> <span>${f1Data.gaiMaxPoints || ''}</span></div>`;
             } else {
                 html += '<p>No course and GA information available</p>';
             }
             html += '</div>';
-            
-            // F2 data
-            html += '<h3>Assessment Information</h3>';
-            html += '<div class="data-table">';
+
+            html += '<h3>Assessment Information</h3><div>';
             if (Object.keys(f2Data).length > 0) {
-                html += `<div class="data-row"><span>Assessment Title:</span> <span>${f2Data.assessmentTitle || ''}</span></div>`;
-                html += `<div class="data-row"><span>Assessment Description:</span> <span>${f2Data.assessmentDescription || ''}</span></div>`;
-                html += `<div class="data-row"><span>Question Text:</span> <span>${f2Data.questionText || ''}</span></div>`;
+                html += `<div><span>Assessment Title:</span> <span>${f2Data.assessmentTitle || ''}</span></div>`;
+                html += `<div><span>Assessment Description:</span> <span>${f2Data.assessmentDescription || ''}</span></div>`;
+                html += `<div><span>Question Text:</span> <span>${f2Data.questionText || ''}</span></div>`;
             } else {
                 html += '<p>No assessment information available</p>';
             }
             html += '</div>';
-            
-            // F3 data
-            html += '<h3>Assessment Comments</h3>';
-            html += '<div class="data-table">';
+
+            html += '<h3>Assessment Comments</h3><div>';
             if (Object.keys(f3Data).length > 0) {
-                html += `<div class="data-row"><span>Comments:</span> <span>${f3Data.assessmentComments || ''}</span></div>`;
+                html += `<div><span>Comments:</span> <span>${f3Data.assessmentComments || ''}</span></div>`;
             } else {
                 html += '<p>No assessment comments available</p>';
             }
-            html += '</div>';
-            
-            html += '</div>'; // Close user-data-section
-            
-            // Update the UI
+            html += '</div></div>';
+
             userData.innerHTML = html;
         }
-        
-        // Load data when page loads
+
         loadUserData();
-        
-        // Handle back button
+
         backButton.addEventListener('click', function() {
             window.location.href = '{% url "form_step3" %}';
         });
-        
-        // Handle submission
+
         submitButton.addEventListener('click', function() {
-            // Check if CSV is uploaded
             if (!csvFileInput.files || !csvFileInput.files[0]) {
                 alert('Please upload a CSV file first');
                 return;
             }
-            
-            // Get all form data
+
             const formData = new FormData();
             formData.append('csv_file', csvFileInput.files[0]);
-            
-            // Add all the data from previous forms
+
             const allData = {
                 ...JSON.parse(sessionStorage.getItem('f1FormData') || '{}'),
                 ...JSON.parse(sessionStorage.getItem('f2FormData') || '{}'),
                 ...JSON.parse(sessionStorage.getItem('f3FormData') || '{}')
             };
-            
+
             for (const key in allData) {
                 formData.append(key, allData[key]);
             }
-            
-            // Call your placeholder function - replace with actual endpoint
+
             fetch('{% url "form_submit" %}', {
                 method: 'POST',
                 body: formData,
@@ -181,14 +156,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Clear all session storage if successful
-                    sessionStorage.removeItem('f1FormData');
-                    sessionStorage.removeItem('f2FormData');
-                    sessionStorage.removeItem('f3FormData');
-                    sessionStorage.removeItem('csvFileName');
-                    sessionStorage.removeItem('csvFileContent');
-                    
-                    // Redirect to F5 success page
+                    sessionStorage.clear();
                     window.location.href = '{% url "form_success" %}';
                 } else {
                     alert('Error: ' + data.message);

@@ -1,0 +1,173 @@
+/* General Page Container */
+.page-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+/* Section Headers */
+.section-header {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 10px;
+}
+
+.heading {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    background-color: #173d68;
+    padding: 8px 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Upload Section, Data, and Buttons Container */
+.upload-container,
+.data-container,
+.button-group {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 14px;
+}
+
+/* File Upload Styling */
+.file-upload {
+    background-color: #173d68;
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.file-input {
+    display: none;
+}
+
+.file-label {
+    display: inline-block;
+    background-color: white;
+    color: #173d68;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 8px;
+    transition: background-color 0.3s;
+    font-size: 0.95rem;
+}
+
+.file-label:hover {
+    background-color: #dce6f3;
+}
+
+.file-info {
+    margin-top: 6px;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* User Data Display */
+.user-data > div {
+    background-color: #173d68;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 0.95rem;
+}
+
+.user-data h3 {
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.user-data span {
+    display: inline-block;
+    min-width: 140px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+/* Loading text */
+.loading-text {
+    font-style: italic;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.button {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button {
+    background-color: #555;
+}
+
+.submit-button {
+    background-color: #173d68;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
+
+/* Additional Adjustments to Reduce Vertical Space */
+.file-upload {
+    padding: 10px;
+    font-size: 0.95rem;
+}
+
+.file-label {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+}
+
+.file-info {
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.user-data > div {
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.user-data h3 {
+    margin-bottom: 4px;
+}
+
+.button {
+    padding: 8px 14px;
+    font-size: 0.95rem;
+}
+
+.back-button {
+    background-color: #2A68F6;
+}
+
+.submit-button {
+    background-color: #2A68F6;
+   
+}

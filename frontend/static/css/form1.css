@@ -1,0 +1,97 @@
+/* Base styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Centered container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Blue rounded background wrapper */
+  .form-wrapper {
+    background-color: #173d68;
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.75); /* Added shadow */
+  }
+  
+  /* Title styling */
+  .form-wrapper h1,
+  .form-wrapper h2 {
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Shadow for title text */
+  }
+  
+  /* Form description paragraph */
+  .form-description {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Shadow for info text */
+  }
+  
+  /* Grid for form layout */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Column structure */
+  .form-column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Labels */
+  .form-column label {
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  /* Inputs and dropdowns */
+  .form-column input,
+  .form-column select {
+    margin-bottom: 1rem;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #000;
+  }
+  
+  /* Button row */
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Buttons */
+  .button-row button {
+    background-color: #2A68F6;
+    color: #ffffff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for buttons */
+  }
+  
+  .button-row button:hover {
+    background-color: #1c47aa;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+  }
+  

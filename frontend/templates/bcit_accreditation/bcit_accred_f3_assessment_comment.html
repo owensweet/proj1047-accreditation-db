@@ -4,30 +4,29 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+<link rel="stylesheet" href="{% static 'css/form1.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="f3container">
-    <!-- Heading Container -->
-    <div class="heading-container">
+<div class="container">
+    <!-- Form Wrapper -->
+    <div class="form-wrapper">
         <h2>Additional info about assessment</h2>
-    </div>
 
-    <!-- Form Container -->
-    <div class="form-container">
         <form id="assessmentCommentForm">
             <!-- Hidden input to store form data across pages -->
             <input type="hidden" id="formData" class="form-storage">
             {% csrf_token %}
 
-            <div class="f3-form-field">
+            <!-- Comments Field -->
+            <div class="form-column">
                 <label for="assessmentComments">Comments on the assessment results</label>
                 <textarea id="assessmentComments" name="assessmentComments" maxlength="500" placeholder="If the results indicate a high percentage of students marginally meeting or below expectations, please comment on whether any changes or resources are required for students to succeed. [DNI]" required></textarea>
-                <div class="char-counter"><span id="commentsCounter">0</span>/500</div>
+                <div><span id="commentsCounter">0</span>/500</div>
             </div>
 
-            <div class="form-actions">
+            <!-- Button Row -->
+            <div class="button-row">
                 <button type="button" id="backButton">Previous Page</button>
                 <button type="submit" id="nextButton">Next Page</button>
             </div>

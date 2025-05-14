@@ -1,0 +1,147 @@
+/* Main Container */
+div {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px; /* Further reduced padding */
+}
+
+/* Heading Styles */
+h1, h3, h4 {
+    background-color: #173d68; /* Shade of blue you provided */
+    color: white; /* White text */
+    padding: 10px; /* Padding inside the rectangle */
+    border-radius: 12px; /* Rounded corners */
+}
+
+h1 {
+    font-size: 1.8rem; /* Reduced font size */
+    margin-bottom: 10px; /* Reduced margin */
+}
+
+h3 {
+    font-size: 1.4rem; /* Reduced font size */
+    margin-top: 15px; /* Reduced margin */
+    margin-bottom: 8px; /* Reduced margin */
+}
+
+h4 {
+    font-size: 1.2rem; /* Reduced font size */
+    margin-top: 15px; /* Reduced margin */
+}
+
+/* Form Styles */
+form {
+    background-color: #173d68; /* Shade of blue you provided */
+    padding: 10px; /* Further reduced padding */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white; /* White text for form elements */
+}
+
+label {
+    display: block;
+    margin-bottom: 4px; /* Reduced margin */
+    font-weight: bold;
+    color: white; /* White text */
+}
+
+input[type="file"], select, button {
+    width: 100%;
+    padding: 6px; /* Reduced padding */
+    margin: 6px 0; /* Reduced margin */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem; /* Further reduced font size */
+    color: white; /* White text */
+    background-color: #2A68F6; /* Blue background for inputs and buttons */
+}
+
+/* Button Styles */
+button {
+    background-color: #2A68F6; /* Shade of blue you provided */
+    color: white; /* White text */
+    font-size: 0.95rem; /* Reduced font size */
+    cursor: pointer;
+    border: none;
+    border-radius: 8px; /* Rounded corners for button */
+    padding: 10px; /* Added padding */
+}
+
+button:hover {
+    background-color: #173d68;
+}
+
+/* File Input */
+input[type="file"] {
+    padding: 8px; /* Further reduced padding */
+}
+
+/* Upload Status */
+#uploadStatus {
+    display: none;
+    margin-top: 10px; /* Reduced margin */
+    padding: 6px; /* Further reduced padding */
+    border-radius: 4px;
+    text-align: center;
+    background-color: #173d68; /* Shade of blue you provided */
+    color: white; /* White text */
+}
+
+.alert-info {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Recent Uploads Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px; /* Reduced margin */
+}
+
+table th, table td {
+    padding: 6px; /* Reduced padding */
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #f4f7fc;
+    color: #004f9f;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table .success {
+    color: #28a745;
+}
+
+table .failed {
+    color: #dc3545;
+}
+
+/* Template Download Links */
+a {
+    color: #173d68; /* Shade of blue you provided */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

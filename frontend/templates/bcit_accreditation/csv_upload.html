@@ -3,106 +3,82 @@
 {% block title %}Upload CSV - BCIT Accreditation System{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="text-start fw-bold text-white bg-primary p-3">CSV Upload</h1>
-        </div>
-    </div>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/csv_upload.css' %}">
+<div class="container">
+    <h1>CSV Upload</h1>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="my-2">Upload Course Data</h3>
-                </div>
-                <div class="card-body">
-                    <p class="lead mb-4">Use this page to upload course data in CSV format to the BCIT Accreditation System.</p>
-                    
-                    <form id="csvUploadForm" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="mb-4">
-                            <label for="csv_file" class="form-label">Select CSV File</label>
-                            <input class="form-control form-control-lg" type="file" id="csv_file" name="csv_file" accept=".csv" required>
-                            <div class="form-text">Please ensure your CSV file follows the required format.</div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="file_type" class="form-label">Data Type</label>
-                            <select class="form-select" id="file_type" name="file_type" required>
-                                <option value="" selected disabled>Select data type</option>
-                                <option value="course">Course Data</option>
-                                <option value="student">Student Data</option>
-                                <option value="program">Program Data</option>
-                                <option value="accreditation">Accreditation Metrics</option>
-                            </select>
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Upload CSV</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
+    <div class="row">
+        <div class="col-12">
+            <form id="csvUploadForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h3>Upload Course Data</h3>
+
+                <p>Use this page to upload course data in CSV format to the BCIT Accreditation System.</p>
+
+                <label for="csv_file">Select CSV File</label>
+                <input class="form-control" type="file" id="csv_file" name="csv_file" accept=".csv" required>
+
+                <label for="file_type">Data Type</label>
+                <select class="form-control" id="file_type" name="file_type" required>
+                    <option value="" selected disabled>Select data type</option>
+                    <option value="course">Course Data</option>
+                    <option value="student">Student Data</option>
+                    <option value="program">Program Data</option>
+                    <option value="accreditation">Accreditation Metrics</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary">Upload CSV</button>
+            </form>
+
             <!-- Upload Status -->
-            <div id="uploadStatus" class="alert mt-4 d-none" role="alert"></div>
-            
+            <div id="uploadStatus" class="alert d-none" role="alert"></div>
+
             <!-- Template Info -->
-            <div class="card mt-4">
-                <div class="card-header bg-light">
-                    <h4 class="mb-0">CSV Templates</h4>
-                </div>
-                <div class="card-body">
-                    <p>Download the template for the data you want to upload:</p>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="#" class="btn btn-outline-secondary">Course Template</a>
-                        <a href="#" class="btn btn-outline-secondary">Student Template</a>
-                        <a href="#" class="btn btn-outline-secondary">Program Template</a>
-                        <a href="#" class="btn btn-outline-secondary">Accreditation Template</a>
-                    </div>
+            <div>
+                <h4>CSV Templates</h4>
+                <p>Download the template for the data you want to upload:</p>
+                <div>
+                    <a href="#">Course Template</a> | 
+                    <a href="#">Student Template</a> | 
+                    <a href="#">Program Template</a> | 
+                    <a href="#">Accreditation Template</a>
                 </div>
             </div>
-            
+
             <!-- Upload History -->
-            <div class="card mt-4">
-                <div class="card-header bg-light">
-                    <h4 class="mb-0">Recent Uploads</h4>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Filename</th>
-                                    <th>Data Type</th>
-                                    <th>Upload Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>courses_spring2025.csv</td>
-                                    <td>Course Data</td>
-                                    <td>May 6, 2025</td>
-                                    <td><span class="badge bg-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td>program_metrics.csv</td>
-                                    <td>Program Data</td>
-                                    <td>May 5, 2025</td>
-                                    <td><span class="badge bg-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td>accred_data_2025.csv</td>
-                                    <td>Accreditation Metrics</td>
-                                    <td>May 3, 2025</td>
-                                    <td><span class="badge bg-danger">Failed</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div>
+                <h4>Recent Uploads</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Data Type</th>
+                            <th>Upload Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>courses_spring2025.csv</td>
+                            <td>Course Data</td>
+                            <td>May 6, 2025</td>
+                            <td><span class="success">Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>program_metrics.csv</td>
+                            <td>Program Data</td>
+                            <td>May 5, 2025</td>
+                            <td><span class="success">Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>accred_data_2025.csv</td>
+                            <td>Accreditation Metrics</td>
+                            <td>May 3, 2025</td>
+                            <td><span class="failed">Failed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
