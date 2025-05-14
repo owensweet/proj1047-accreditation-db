@@ -3,46 +3,46 @@
 {% block title %}Login - BCIT Accreditation System{% endblock %}
 
 {% block content %}
-<div class="login-wrapper">
-    <h3>Login</h3>
+<div class="login-container">
+    <div class="login-card">
+        <h2>Login</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'login_user' %}" class="login-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" required placeholder="Enter your username" class="input-field" />
             </div>
-        {% endfor %}
-    {% endif %}
 
-    <form method="post" action="{% url 'login_user' %}">
-        {% csrf_token %}
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required placeholder="Enter your password" class="input-field" />
+            </div>
 
-        <div class="form-control">
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" required placeholder="Enter your username" class="input-thick-border" />
-        </div>
+            <div class="form-check">
+                <input id="remember" type="checkbox" name="remember" />
+                <label for="remember">Remember me</label>
+            </div>
 
-        <div class="form-control">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" required placeholder="Enter your password" class="input-thick-border" />
-        </div>
-
-        <div class="form-check">
-            <input id="remember" type="checkbox" name="remember" />
-            <label for="remember">Remember me</label>
-        </div>
-
-        <div class="actions">
-            <a href="#">Forgot Password?</a>
-            <button type="submit">Login</button>
-        </div>
-    </form>
-
-    <div class="footer-note">
-        <p>For account assistance, please contact your department administrator.</p>
-        <p>© {% now "Y" %} BCIT Accreditation System</p>
+            <div>
+                <button type="submit" class="login-button">Login</button>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+        </form>
     </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block extra_js %}

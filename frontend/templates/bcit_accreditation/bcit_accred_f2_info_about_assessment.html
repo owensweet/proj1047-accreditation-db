@@ -1,0 +1,120 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Assessment Information - BCIT Accreditation System{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="f2container">
+    <!-- Heading Container -->
+    <div class="heading-container">
+        <h2>Additional info about assessment</h2>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <form id="assessmentInfoForm">
+            <!-- Hidden input to store form data across pages -->
+            <input type="hidden" id="formData" class="form-storage">
+            {% csrf_token %}
+
+            <div class="f2-form-field">
+                <label for="assessmentTitle">Assessment title</label>
+                <input type="text" id="assessmentTitle" name="assessmentTitle" maxlength="150" placeholder="e.g. Lab 3 - Circuit Analysis" required>
+                <div class="char-counter"><span id="assessmentTitleCounter">0</span>/150</div>
+            </div>
+
+            <div class="f2-form-field">
+                <label for="assessmentDescription">Assessment description</label>
+                <textarea id="assessmentDescription" name="assessmentDescription" maxlength="250" placeholder="Provide here a short description of the assessment [DNI]" required></textarea>
+                <div class="char-counter"><span id="assessmentDescriptionCounter">0</span>/250</div>
+            </div>
+
+            <div class="f2-form-field">
+                <label for="questionText">Question text</label>
+                <textarea id="questionText" name="questionText" maxlength="500" placeholder="Provide here the text of the requirement in the assessment. Limit description to 800 characters [DNI]" required></textarea>
+                <div class="char-counter"><span id="questionTextCounter">0</span>/500</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="backButton">Previous Page</button>
+                <button type="submit" id="nextButton">Next Page</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reference to form elements
+        const form = document.getElementById('assessmentInfoForm');
+        const assessmentTitle = document.getElementById('assessmentTitle');
+        const assessmentDescription = document.getElementById('assessmentDescription');
+        const questionText = document.getElementById('questionText');
+        
+        // Character counters
+        const titleCounter = document.getElementById('assessmentTitleCounter');
+        const descCounter = document.getElementById('assessmentDescriptionCounter');
+        const questionCounter = document.getElementById('questionTextCounter');
+        
+        // Set up character counting
+        function updateCharCounter(field, counter) {
+            counter.textContent = field.value.length;
+        }
+        
+        // Add input listeners to update character counts
+        assessmentTitle.addEventListener('input', () => updateCharCounter(assessmentTitle, titleCounter));
+        assessmentDescription.addEventListener('input', () => updateCharCounter(assessmentDescription, descCounter));
+        questionText.addEventListener('input', () => updateCharCounter(questionText, questionCounter));
+        
+        // Load previously stored data if available
+        if (sessionStorage.getItem('f2FormData')) {
+            const storedData = JSON.parse(sessionStorage.getItem('f2FormData'));
+            
+            if (storedData.assessmentTitle) {
+                assessmentTitle.value = storedData.assessmentTitle;
+                updateCharCounter(assessmentTitle, titleCounter);
+            }
+            
+            if (storedData.assessmentDescription) {
+                assessmentDescription.value = storedData.assessmentDescription;
+                updateCharCounter(assessmentDescription, descCounter);
+            }
+            
+            if (storedData.questionText) {
+                questionText.value = storedData.questionText;
+                updateCharCounter(questionText, questionCounter);
+            }
+        }
+        
+        // Handle form submission - store data and navigate to next page (F3)
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                assessmentTitle: assessmentTitle.value,
+                assessmentDescription: assessmentDescription.value,
+                questionText: questionText.value
+            };
+            
+            // Store in session storage
+            sessionStorage.setItem('f2FormData', JSON.stringify(formData));
+            
+            // Navigate to next page (F3)
+            window.location.href = '{% url "home" %}';  // Replace with actual F3 page URL when it exists
+        });
+        
+        // Handle back button - navigate back to F1
+        document.getElementById('backButton').addEventListener('click', function() {
+            // Navigate back to F1 (data stays in session storage)
+            window.location.href = '{% url "home" %}';  // Replace with actual F1 page URL
+        });
+    });
+</script>
+{% endblock %}
