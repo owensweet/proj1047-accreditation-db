@@ -486,3 +486,105 @@ body {
     background-color: var(--secondary-accent);
     color: white;
 }
+
+
+/* ========================
+   HOME PAGE CSS
+========================= */
+/* Unique container for the entire home page */
+.home-container-custom {
+    display: flex;
+    flex-direction: row; /* Aligns items horizontally */
+    justify-content: space-between; /* Distributes evenly */
+    align-items: center; /* Centers items vertically */
+    flex-wrap: nowrap; /* Prevents wrapping */
+    gap: 1.5rem;
+    width: 100%;
+    min-height: 60vh; /* Makes the container take full viewport height */
+}
+
+
+
+.feature-box-custom {
+    background-color: #fcfaf1; /* Yellow background */
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.75);
+    text-align: center;
+    width: 300px;
+    height: 400px; /* Increased height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* Blue title section at the top */
+.feature-title-custom {
+    background-color: #173d68; /* Blue */
+    width: 100%;
+    height: 20%; /* Covers the top 20% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white; /* Makes text readable */
+    border-radius: 12px 12px 0 0; /* Rounds top corners */
+}
+
+/* Image wrapper section */
+.image-wrapper-custom {
+    width: 100%;
+    height: 55%; /* Gives more space to images */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Blue box behind images */
+.image-box-custom {
+    background-color: #173d68; /* Blue background */
+    padding: 1rem;
+    border-radius: 8px;
+    width: 50%;
+    height: 140px; /* Increased height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* View Button at the bottom */
+.view-button-custom {
+    margin-top: 1rem; /* Adds space above the button */
+    margin-bottom: 1rem; /* Adds space below the button */
+    padding: 0.6rem 1.5rem; /* Adjusted padding */
+    background-color: #77DD77;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: 70%;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.view-button-custom:hover {
+    background-color: #519a51;
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .feature-box-custom {
+        width: 90%;
+    }
+
+    .image-box-custom img {
+        max-width: 80px;
+    }
+}

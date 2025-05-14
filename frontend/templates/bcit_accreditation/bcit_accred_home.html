@@ -3,42 +3,51 @@
 {% block title %}Home - BCIT Accreditation System{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="text-start fw-bold text-white bg-primary p-3">Home Page</h1>
+<div class="home-container-custom">
+    
+    <!-- Upload CSV Section -->
+    <div class="feature-box-custom">
+        <div class="feature-title-custom">Upload CSV File</div>
+        <div class="image-wrapper-custom"> 
+            <div class="image-box-custom">
+                <img src="/static/images/csv.png" alt="CSV Icon">
+            </div>
         </div>
+        <a href="{% url 'csv_upload' %}" class="view-button-custom">View</a>
     </div>
 
-    <div class="row justify-content-center">
-        <!-- Upload CSV Card -->
-        <div class="col-md-3 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header text-center bg-primary text-white">
-                    <h5 class="my-2">Upload CSV File</h5>
-                </div>
-                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                    <div class="icon-container mb-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/6133/6133884.png" alt="CSV Icon" class="img-fluid" style="max-height: 100px;">
-                    </div>
-                    <a href="{% url 'csv_upload' %}" class="btn btn-success rounded-pill px-4">Upload</a>
-                </div>
+    <!-- Analytics Section -->
+    <div class="feature-box-custom">
+        <div class="feature-title-custom">Analytics Panel</div>
+        <div class="image-wrapper-custom">
+            <div class="image-box-custom">
+                <img src="/static/images/graph.png" alt="Analytics Icon">
             </div>
         </div>
-        <!-- Admin Panel Card -->
-        <div class="col-md-3 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-header text-center bg-primary text-white">
-                    <h5 class="my-2">Admin Panel</h5>
-                </div>
-                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                    <div class="icon-container mb-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3126/3126647.png" alt="Admin Icon" class="img-fluid" style="max-height: 100px;">
-                    </div>
-                    <a href="{% url 'admin_dashboard' %}" class="btn btn-success rounded-pill px-4">View</a>
-                </div>
-            </div>
-        </div>
+        <a href="{% url 'admin_dashboard' %}" class="view-button-custom">View</a>
     </div>
+
+    <!-- Courses Section -->
+    <div class="feature-box-custom">
+        <div class="feature-title-custom">Courses</div>
+        <div class="image-wrapper-custom">
+            <div class="image-box-custom">
+                <img src="/static/images/book.png" alt="Courses Icon">
+            </div>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="view-button-custom">View</a>
+    </div>
+
+    <!-- Admin Panel Section -->
+    <div class="feature-box-custom">
+        <div class="feature-title-custom">Admin Panel</div>
+        <div class="image-wrapper-custom">
+            <div class="image-box-custom">
+                <img src="/static/images/admin.png" alt="Admin Icon">
+            </div>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="view-button-custom">View</a>
+    </div>
+
 </div>
 {% endblock %}
