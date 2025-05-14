@@ -29,3 +29,11 @@ def get_cohort(program_term: int, academic_term: int) -> int:
             program_term -= 1
 
     return year * 100 + term
+
+def get_achievement_level(gai_score, question_max):
+    """
+    Returns the achievement level as a float formatted to 2 decimal places.
+    """
+    if question_max == 0:
+        raise ValueError("Maximum question score cannot be zero.")
+    return round(gai_score / question_max, 2)
