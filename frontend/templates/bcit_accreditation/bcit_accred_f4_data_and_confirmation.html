@@ -144,7 +144,7 @@
         
         // Handle back button
         backButton.addEventListener('click', function() {
-            window.location.href = '{% url "home" %}';  // Replace with actual F3 page URL
+            window.location.href = '{% url "form_step3" %}';
         });
         
         // Handle submission
@@ -171,7 +171,7 @@
             }
             
             // Call your placeholder function - replace with actual endpoint
-            fetch('/placeholder4-DB-write/', {
+            fetch('{% url "form_submit" %}', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -188,8 +188,8 @@
                     sessionStorage.removeItem('csvFileName');
                     sessionStorage.removeItem('csvFileContent');
                     
-                    // Redirect to F5 page
-                    window.location.href = '{% url "home" %}';  // Replace with actual F5 page URL
+                    // Redirect to F5 success page
+                    window.location.href = '{% url "form_success" %}';
                 } else {
                     alert('Error: ' + data.message);
                 }

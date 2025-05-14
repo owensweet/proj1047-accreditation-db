@@ -203,3 +203,121 @@ def admin_dashboard_view(request):
         'recent_courses': None
     }
     return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
+
+@login_required
+def csv_upload_view(request):
+    """
+    Handle CSV file uploads
+    """
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        uploaded_file = request.FILES['csv_file']
+        file_type = request.POST.get('file_type')
+        
+        # Check if file is a CSV
+        if not uploaded_file.name.endswith('.csv'):
+            return JsonResponse({'success': False, 'message': 'File is not a CSV'})
+        
+        # Check file type
+        if not file_type:
+            return JsonResponse({'success': False, 'message': 'Data type not specified'})
+        
+        try:
+            # Process the CSV file (this is a simplified version)
+            file_content = uploaded_file.read().decode('utf-8')
+            csvfile = io.StringIO(file_content)
+            rows = list(csv.reader(csvfile))
+            
+            # Here is where we put where we process the file based on its type
+            # For now, just return success
+            
+            return JsonResponse({
+                'success': True, 
+                'message': f'File successfully uploaded as {file_type} data!'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False, 
+                'message': f'Error processing file: {str(e)}'
+            })
+    
+    context = {}
+    return render(request, 'bcit_accreditation/csv_upload.html', context)
+
+@login_required
+def form_step1_view(request):
+    """
+    Display the first step of the form
+    """
+    return render(request, 'bcit_accreditation/bcit_accred_f1_course_and_ga.html')
+
+@login_required
+def form_step2_view(request):
+    """
+    Display the second step of the form
+    """
+    return render(request, 'bcit_accreditation/bcit_accred_f2_info_about_assessment.html')
+
+@login_required
+def form_step3_view(request):
+    """
+    Display the third step of the form
+    """
+    return render(request, 'bcit_accreditation/bcit_accred_f3_assessment_comment.html')
+
+@login_required
+def form_step4_view(request):
+    """
+    Display the fourth step of the form
+    """
+    return render(request, 'bcit_accreditation/bcit_accred_f4_data_and_confirmation.html')
+
+@login_required
+def form_success_view(request):
+    """
+    Display the success page after form submission
+    """
+    return render(request, 'bcit_accreditation/bcit_accred_f5_successful_upload.html')
+
+@login_required
+def form_submit_view(request):
+    """
+    Process the form submission
+    """
+    if request.method == 'POST':
+        try:
+            # Here we put logic or function refrence to process the form data and save it to the database
+            # For now, just return success
+            return JsonResponse({
+                'success': True,
+                'message': 'Data saved successfully!'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': f'Error saving data: {str(e)}'
+            })
+    
+    # If not POST, redirect to form step 1
+    return redirect('form_step1')
+
+@login_required
+def courses_view(request):
+    """
+    Display the courses listing page
+    """
+    return render(request, 'bcit_accreditation/courses.html')
+
+@login_required
+def course_details_view(request, course_id):
+    """
+    Display course details
+    """
+    context = {'course_id': course_id}
+    return render(request, 'bcit_accreditation/bcit_accred_course_details.html', context)
+
+@login_required
+def analytics_view(request):
+    """
+    Display analytics dashboard
+    """
+    return render(request, 'bcit_accreditation/analytics.html')

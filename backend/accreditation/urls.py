@@ -11,5 +11,21 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
     path('test/', views.test_upload_view, name='test_upload'),
-    path('csv-upload/', views.test_upload_view, name='csv_upload'),
+    # path('csv-upload/', views.test_upload_view, name='csv_upload'),
+    path('csv-upload/', views.csv_upload_view, name='csv_upload'),
+    
+    # Multi-step form pages
+    path('form/step1/', views.form_step1_view, name='form_step1'),
+    path('form/step2/', views.form_step2_view, name='form_step2'),
+    path('form/step3/', views.form_step3_view, name='form_step3'),
+    path('form/step4/', views.form_step4_view, name='form_step4'),
+    path('form/success/', views.form_success_view, name='form_success'),
+    path('form/submit/', views.form_submit_view, name='form_submit'),
+    
+    # Analytics page
+    path('analytics/', views.analytics_view, name='analytics'),
+    
+    # Course pages
+    path('courses/', views.courses_view, name='courses'),
+    path('course/<int:course_id>/', views.course_details_view, name='course_details'),
 ]

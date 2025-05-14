@@ -75,13 +75,13 @@
             sessionStorage.setItem('f3FormData', JSON.stringify(formData));
             
             // Navigate to next page (F4)
-            window.location.href = '{% url "home" %}';  // Replace with actual F4 page URL when it exists
+            window.location.href = '{% url "form_step4" %}';
         });
         
         // Handle back button - navigate back to F2
         document.getElementById('backButton').addEventListener('click', function() {
-            // Navigate back to F2 (data stays in session storage)
-            window.location.href = '{% url "home" %}';  // Replace with actual F2 page URL
+            // Navigate back to F2
+            window.location.href = '{% url "form_step2" %}';
         });
     });
 </script>

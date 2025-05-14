@@ -31,10 +31,12 @@
 <nav class="main-nav">
     <div class="nav-links">
         <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-        {% if user.is_staff or user.role == 'admin' %}
-            <a href="{% url 'admin_dashboard' %}" class="{% if request.path == '/admin-dashboard' %}active{% endif %}">Admin Dashboard</a>
+        <a href="{% url 'courses' %}" class="{% if 'courses' in request.path %}active{% endif %}">Courses</a>
+        <a href="{% url 'analytics' %}" class="{% if 'analytics' in request.path %}active{% endif %}">Analytics</a>
+        <a href="{% url 'csv_upload' %}" class="{% if 'csv-upload' in request.path %}active{% endif %}">CSV Upload</a>
+        {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'admin_dashboard' %}" class="{% if 'admin-dashboard' in request.path %}active{% endif %}">Admin Dashboard</a>
         {% endif %}
-        <a href="{% url 'test_upload' %}" class="{% if request.path == '/test/' %}active{% endif %}">CSV Upload Test</a>
     </div>
 </nav>
 {% endif %}

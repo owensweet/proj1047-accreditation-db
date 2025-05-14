@@ -266,7 +266,7 @@
             });
         });
         
-        // Handle form submission - store data and navigate to next page
+        // Update the form submission to navigate to F2
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             
@@ -284,17 +284,17 @@
             // Store in session storage
             sessionStorage.setItem('f1FormData', JSON.stringify(formData));
             
-            // Navigate to next page
-            window.location.href = '{% url "home" %}'; // Replace with actual next page URL when available
+            // Navigate to next page (F2)
+            window.location.href = '{% url "form_step2" %}';
         });
         
-        // Handle back button
+        // Update back button to go to home
         document.getElementById('backButton').addEventListener('click', function() {
             // Clear session storage for this page
             sessionStorage.removeItem('f1FormData');
             
-            // Navigate back
-            window.location.href = '{% url "home" %}'; // Replace with actual previous page URL
+            // Navigate back to home
+            window.location.href = '{% url "home" %}';
         });
     });
 </script>
