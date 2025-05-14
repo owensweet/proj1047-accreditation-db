@@ -143,34 +143,23 @@ def test_upload_view(request):
             csvfile = io.StringIO(file_content)
             rows = list(csv.reader(csvfile))
 
-            program = get_cell(rows, 3, 'D')
-            course = get_cell(rows, 4, 'D')
-            term = get_cell(rows, 5, 'D')
-            ga = get_cell(rows, 8, 'D')
-            gai = get_cell(rows, 9, 'D')
-            instr_level = get_cell(rows, 10, 'D')
-            clos = get_cell(rows, 11, 'D')
-            assess_type = get_cell(rows, 12, 'D')
-            assess_weight = get_cell(rows, 13, 'D')
+            extracted_data = []
 
-            row_count = len(rows)
+            for row in rows[3:]:
+                try:
+                    student_id = row[1].strip() if row[1] else None
+                    gai_score = row[2].strip() if row[2] else None
+                    if student_id and gai_score:
+                        extracted_data.append((student_id, gai_score))
+                except IndexError:
+                    continue
 
             return JsonResponse({
                 'success': True,
-                'message': f'File uploaded. Found {row_count} rows.',
+                'message': f'File uploaded and data extracted.',
                 'file_name': csv_file.name,
                 'file_size': csv_file.size,
-                'extracted': {
-                    'program': program,
-                    'course': course,
-                    'term': term,
-                    'graduate_attribute': ga,
-                    'gai': gai,
-                    'instructional_level': instr_level,
-                    'clos': clos,
-                    'assessment_type': assess_type,
-                    'assessment_weight': assess_weight
-                }
+                'extracted': extracted_data
             })
         except Exception as e:
             return JsonResponse({
