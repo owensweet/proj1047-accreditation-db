@@ -1,0 +1,301 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Course and GA Information - BCIT Accreditation System{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="f1container">
+    <!-- Heading Container -->
+    <div class="heading-container">
+        <h2>Course and GA info</h2>
+    </div>
+
+    <!-- Instructions Container -->
+    <div class="instructions-container">
+        <p>Please provide the following information about your course and the graduate attribute indicator that was assessed in your course.</p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <form id="courseGAForm">
+            <!-- Hidden input to store form data across pages -->
+            <input type="hidden" id="formData" class="form-storage">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <!-- Left Column -->
+                <div class="form-column">
+                    <div class="form-row">
+                        <label for="program">Program</label>
+                        <div class="form-field">
+                            <select id="program" name="program" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="ELEX">ELEX</option>
+                                <option value="CIVL">CIVL</option>
+                                <option value="MECH">MECH</option>
+                                <option value="MINE">MINE</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="course">Course</label>
+                        <div class="form-field">
+                            <input type="text" id="course" name="course" placeholder="e.g. ENGR 3800 [DNI]" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="academicTerm">Academic term</label>
+                        <div class="form-field">
+                            <input type="text" id="academicTerm" name="academicTerm" placeholder="e.g. 202510 [DNI]" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="programTerm">Program term</label>
+                        <div class="form-field">
+                            <select id="programTerm" name="programTerm" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                                <option value="Term 4">Term 4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="facultyFirstName1">Faculty first name</label>
+                        <div class="form-field">
+                            <input type="text" id="facultyFirstName1" name="facultyFirstName1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="facultyFirstName2">Faculty first name</label>
+                        <div class="form-field">
+                            <input type="text" id="facultyFirstName2" name="facultyFirstName2" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="graduateAttribute">Graduate attribute</label>
+                        <div class="form-field">
+                            <select id="graduateAttribute" name="graduateAttribute" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="Knowledge Base">Knowledge Base</option>
+                                <option value="Problem Analysis">Problem Analysis</option>
+                                <option value="Investigation">Investigation</option>
+                                <option value="Design">Design</option>
+                                <option value="Use of Tools">Use of Tools</option>
+                                <option value="Communication">Communication</option>
+                                <option value="Teamwork">Teamwork</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="graduateAttributeIndicator">Graduate attribute indicator</label>
+                        <div class="form-field">
+                            <select id="graduateAttributeIndicator" name="graduateAttributeIndicator" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <!-- Options will be populated based on selected Graduate Attribute -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="form-column">
+                    <div class="form-row">
+                        <label for="instructionalLevel">Instructional level</label>
+                        <div class="form-field">
+                            <select id="instructionalLevel" name="instructionalLevel" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="Introductory">Introductory</option>
+                                <option value="Intermediate">Intermediate Development</option>
+                                <option value="Advanced">Advanced Application</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="assessmentAlignment">Assessment alignment with GAI</label>
+                        <div class="form-field">
+                            <select id="assessmentAlignment" name="assessmentAlignment" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="Perfectly">Perfectly</option>
+                                <option value="Highly">Highly</option>
+                                <option value="Mostly">Mostly</option>
+                                <option value="Somewhat">Somewhat</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="courseLearningOutcomes">Course learning outcome(s)</label>
+                        <div class="form-field">
+                            <select id="courseLearningOutcomes" name="courseLearningOutcomes" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <!-- Options will be populated when course is selected -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="assessmentType">Assessment type</label>
+                        <div class="form-field">
+                            <select id="assessmentType" name="assessmentType" required>
+                                <option value="" disabled selected>Click to select</option>
+                                <option value="Quiz">Quiz</option>
+                                <option value="Test">Test</option>
+                                <option value="Exam">Exam</option>
+                                <option value="Assignment">Assignment</option>
+                                <option value="Project">Project</option>
+                                <option value="Lab">Lab</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="courseWeighting">Course % weighting</label>
+                        <div class="form-field">
+                            <input type="number" id="courseWeighting" name="courseWeighting" min="0" max="100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="assessmentMaxScore">Assessment max score points</label>
+                        <div class="form-field">
+                            <input type="number" id="assessmentMaxScore" name="assessmentMaxScore" min="0" step="0.1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="gaiWeight">GAI weight (%of assessment)</label>
+                        <div class="form-field">
+                            <input type="number" id="gaiWeight" name="gaiWeight" min="0" max="100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="gaiMaxPoints">GAI max points</label>
+                        <div class="form-field">
+                            <input type="number" id="gaiMaxPoints" name="gaiMaxPoints" min="0" step="0.1" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="backButton">Back</button>
+                <button type="submit" id="nextButton">Next page</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Store form data between pages
+        const formStorage = document.getElementById('formData');
+        const form = document.getElementById('courseGAForm');
+        
+        // Load previously stored data if available
+        if (sessionStorage.getItem('f1FormData')) {
+            const storedData = JSON.parse(sessionStorage.getItem('f1FormData'));
+            
+            // Populate form fields with stored data
+            Object.keys(storedData).forEach(key => {
+                const field = document.getElementById(key);
+                if (field) {
+                    field.value = storedData[key];
+                }
+            });
+        }
+        
+        // Handle Graduate Attribute selection to populate indicators
+        const gaSelect = document.getElementById('graduateAttribute');
+        const gaiSelect = document.getElementById('graduateAttributeIndicator');
+        
+        gaSelect.addEventListener('change', function() {
+            // Clear existing options
+            gaiSelect.innerHTML = '<option value="" disabled selected>Click to select</option>';
+            
+            // Add new options based on selected GA
+            const ga = this.value;
+            let indicators = [];
+            
+            switch(ga) {
+                case 'Knowledge Base':
+                    indicators = ['KB1: Apply knowledge of mathematics', 'KB2: Apply knowledge of physics', 'KB3: Apply knowledge of engineering fundamentals'];
+                    break;
+                case 'Problem Analysis':
+                    indicators = ['PA1: Identify the problem', 'PA2: Formulate the problem', 'PA3: Analyze the problem'];
+                    break;
+                case 'Investigation':
+                    indicators = ['IN1: Plan investigations', 'IN2: Conduct investigations', 'IN3: Analyze data'];
+                    break;
+                case 'Design':
+                    indicators = ['DE1: Define design problems', 'DE2: Generate design solutions', 'DE3: Test and refine designs'];
+                    break;
+                case 'Use of Tools':
+                    indicators = ['UT1: Select appropriate tools', 'UT2: Use tools effectively', 'UT3: Create new tools when needed'];
+                    break;
+                case 'Communication':
+                    indicators = ['CO1: Written communication', 'CO2: Oral communication', 'CO3: Visual communication'];
+                    break;
+                case 'Teamwork':
+                    indicators = ['TW1: Operate in team roles', 'TW2: Manage team dynamics', 'TW3: Lead teams effectively'];
+                    break;
+            }
+            
+            // Add options to select
+            indicators.forEach(indicator => {
+                const option = document.createElement('option');
+                option.value = indicator;
+                option.textContent = indicator;
+                gaiSelect.appendChild(option);
+            });
+        });
+        
+        // Handle form submission - store data and navigate to next page
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = {};
+            const formElements = form.elements;
+            
+            for (let i = 0; i < formElements.length; i++) {
+                const element = formElements[i];
+                if (element.name && element.name !== 'csrfmiddlewaretoken' && element.type !== 'submit' && element.type !== 'button') {
+                    formData[element.id] = element.value;
+                }
+            }
+            
+            // Store in session storage
+            sessionStorage.setItem('f1FormData', JSON.stringify(formData));
+            
+            // Navigate to next page
+            window.location.href = '{% url "home" %}'; // Replace with actual next page URL when available
+        });
+        
+        // Handle back button
+        document.getElementById('backButton').addEventListener('click', function() {
+            // Clear session storage for this page
+            sessionStorage.removeItem('f1FormData');
+            
+            // Navigate back
+            window.location.href = '{% url "home" %}'; // Replace with actual previous page URL
+        });
+    });
+</script>
+{% endblock %}
