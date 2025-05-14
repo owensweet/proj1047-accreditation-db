@@ -1,19 +1,19 @@
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import MinLengthValidator
 
 class DataProcess(models.Model):
-    term = models.CharField(max_length=6, primary_key=True)
+    term = models.CharField(max_length=6, validators=[MinLengthValidator(6)])
     program = models.CharField(max_length=4, choices=[('ELEX', 'ELEX'), ('CIVL', 'CIVL'),
                                                       ('MECH', 'MECH'),('MINE', 'MINE')])
-    course = models.CharField(max_length=8)
+    course = models.CharField(max_length=9, validators=[MinLengthValidator(9)])
     gai = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.term} - {self.program} - {self.course}"
 
 class FacultyCI(models.Model):
-    course = models.CharField(max_length=8, primary_key=True)
-    term = models.CharField(max_length=6)
+    course = models.CharField(max_length=9, validators=[MinLengthValidator(9)])
+    term = models.CharField(max_length=6, validators=[MinLengthValidator(6)])
     instructor = models.CharField(max_length=100)
     assessment_title = models.CharField(max_length=12)
     gai_score = models.DecimalField(max_digits=5, decimal_places=2)
@@ -24,7 +24,7 @@ class FacultyCI(models.Model):
         return f"{self.course} - {self.assessment_title}"
 
 class ProgramCI(models.Model):
-    term = models.CharField(max_length=6, primary_key=True)
+    term = models.CharField(max_length=6)
     ga = models.CharField(max_length=100)
     gai = models.CharField(max_length=100)
     gai_score = models.DecimalField(max_digits=5, decimal_places=2)
@@ -36,7 +36,7 @@ class ProgramCI(models.Model):
         return f"{self.term} - {self.ga} - {self.gai}"
 
 class AssessValidity(models.Model):
-    gai = models.CharField(max_length=100, primary_key=True)
+    gai = models.CharField(max_length=100)
     ga = models.CharField(max_length=100)
     course = models.CharField(max_length=8)
     question_max = models.IntegerField()
@@ -50,7 +50,7 @@ class AssessValidity(models.Model):
         return f"{self.course} - {self.ga}"
 
 class AccredReport(models.Model):
-    program = models.CharField(max_length=4, primary_key=True)
+    program = models.CharField(max_length=4)
     term = models.CharField(max_length=6)
     ga = models.CharField(max_length=100)
     gai = models.CharField(max_length=100)
@@ -67,7 +67,7 @@ class AccredReport(models.Model):
         return f"{self.program} - {self.term}"
 
 class AnnualReport(models.Model):
-    program = models.CharField(max_length=4, primary_key=True)
+    program = models.CharField(max_length=4)
     term = models.CharField(max_length=6)
     course = models.CharField(max_length=8)
     ga = models.CharField(max_length=100)
