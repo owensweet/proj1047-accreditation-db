@@ -4,7 +4,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
-from django.core.paginator import Paginator
 from django.db.models import Q
 import csv
 import io
