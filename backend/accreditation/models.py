@@ -1,11 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-no_space_validator = RegexValidator(
-    regex=r'^[^\\s]+$',
-    message='This field cannot contain spaces.'
-)
-
 class DataProcess(models.Model):
     term = models.CharField(max_length=6, primary_key=True)
     program = models.CharField(max_length=4, choices=[('ELEX', 'ELEX'), ('CIVL', 'CIVL'),
