@@ -1,0 +1,88 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Assessment Comments - BCIT Accreditation System{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="f3container">
+    <!-- Heading Container -->
+    <div class="heading-container">
+        <h2>Additional info about assessment</h2>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <form id="assessmentCommentForm">
+            <!-- Hidden input to store form data across pages -->
+            <input type="hidden" id="formData" class="form-storage">
+            {% csrf_token %}
+
+            <div class="f3-form-field">
+                <label for="assessmentComments">Comments on the assessment results</label>
+                <textarea id="assessmentComments" name="assessmentComments" maxlength="500" placeholder="If the results indicate a high percentage of students marginally meeting or below expectations, please comment on whether any changes or resources are required for students to succeed. [DNI]" required></textarea>
+                <div class="char-counter"><span id="commentsCounter">0</span>/500</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="backButton">Previous Page</button>
+                <button type="submit" id="nextButton">Next Page</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reference to form elements
+        const form = document.getElementById('assessmentCommentForm');
+        const commentsField = document.getElementById('assessmentComments');
+        const commentsCounter = document.getElementById('commentsCounter');
+        
+        // Set up character counting
+        function updateCharCounter() {
+            commentsCounter.textContent = commentsField.value.length;
+        }
+        
+        // Add input listener to update character count
+        commentsField.addEventListener('input', updateCharCounter);
+        
+        // Load previously stored data if available
+        if (sessionStorage.getItem('f3FormData')) {
+            const storedData = JSON.parse(sessionStorage.getItem('f3FormData'));
+            
+            if (storedData.assessmentComments) {
+                commentsField.value = storedData.assessmentComments;
+                updateCharCounter();
+            }
+        }
+        
+        // Handle form submission - store data and navigate to next page (F4)
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                assessmentComments: commentsField.value
+            };
+            
+            // Store in session storage
+            sessionStorage.setItem('f3FormData', JSON.stringify(formData));
+            
+            // Navigate to next page (F4)
+            window.location.href = '{% url "home" %}';  // Replace with actual F4 page URL when it exists
+        });
+        
+        // Handle back button - navigate back to F2
+        document.getElementById('backButton').addEventListener('click', function() {
+            // Navigate back to F2 (data stays in session storage)
+            window.location.href = '{% url "home" %}';  // Replace with actual F2 page URL
+        });
+    });
+</script>
+{% endblock %}

@@ -158,7 +158,7 @@
 .f2-form-field input,
 .f2-form-field textarea {
     width: 100%;
-    background-color: #c9e4f9; /* Light blue background from image */
+    background-color: #c9e4f9; /* Light blue background from design */
     border: 1px solid #000;
     padding: 10px;
     box-sizing: border-box;
@@ -175,7 +175,7 @@
     resize: vertical;
 }
 
-/* Make the question text textarea taller as shown in the image */
+/* Make the question text textarea taller as design indicated*/
 .f2-form-field textarea#questionText {
     min-height: 200px;
 }
@@ -207,7 +207,52 @@
 /* ===========================
     Form Page Style 3
 =========================== */
+.f3container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #000;
+    box-sizing: border-box;
+}
 
+.f3-form-field {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.f3-form-field label {
+    width: 250px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.f3-form-field textarea {
+    width: 100%;
+    min-height: 250px; /* Taller textarea as design indicated */
+    background-color: #c9e4f9; /* Light blue background from design*/
+    border: 1px solid #000;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 16px;
+    resize: vertical;
+}
+
+.f3-form-field textarea:focus {
+    outline: none;
+    border-color: #0057a6;
+    background-color: #e9f4ff;
+}
+
+.f3-form-field textarea::placeholder {
+    color: #555;
+}
+
+.f3-form-field textarea:focus::placeholder {
+    color: transparent;
+}
 
 /* ===========================
     Form Page Style 4
