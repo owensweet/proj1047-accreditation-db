@@ -29,13 +29,12 @@
 <!-- NAVIGATION START -->
 {% if user.is_authenticated %}
 <nav class="main-nav">
-    <div class="nav-title">Navigation</div>
     <div class="nav-links">
-        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
         {% if user.is_staff or user.role == 'admin' %}
-            <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+            <a href="{% url 'admin_dashboard' %}" class="{% if request.path == '/admin-dashboard' %}active{% endif %}">Admin Dashboard</a>
         {% endif %}
-        <a href="{% url 'test_upload' %}">CSV Upload Test</a>
+        <a href="{% url 'test_upload' %}" class="{% if request.path == '/test/' %}active{% endif %}">CSV Upload Test</a>
     </div>
 </nav>
 {% endif %}
