@@ -1,0 +1,41 @@
+{% extends 'bcit_accreditation/base.html' %}
+
+{% block title %}Upload Successful - BCIT Accreditation System{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formstyle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="f5container">
+    <!-- Success Message Container -->
+    <div class="success-container">
+        <h2>Upload successful</h2>
+    </div>
+
+    <!-- Home Button -->
+    <div class="home-button-container">
+        <a href="{% url 'home' %}" id="homeButton" class="home-button">Home</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Clear all session storage data for the multi-step form
+        sessionStorage.removeItem('f1FormData');
+        sessionStorage.removeItem('f2FormData');
+        sessionStorage.removeItem('f3FormData');
+        sessionStorage.removeItem('csvFileName');
+        sessionStorage.removeItem('csvFileContent');
+        
+        // Add click handler for home button (although not strictly necessary)
+        document.getElementById('homeButton').addEventListener('click', function() {
+            // We could do additional cleanup here if needed
+            window.location.href = '{% url "home" %}';
+        });
+    });
+</script>
+{% endblock %}
