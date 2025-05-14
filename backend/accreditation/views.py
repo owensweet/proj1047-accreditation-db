@@ -196,11 +196,11 @@ def admin_dashboard_view(request):
     """
     # Get counts for dashboard stats
     context = {
-        'total_courses': Course.objects.count(),
-        'total_departments': Department.objects.count(),
-        'pending_updates': Course.objects.filter(accreditation_status='pending').count(),
-        'required_actions': CSVUpload.objects.filter(status='failed').count() + CSVUpload.objects.filter(status='processing').count(),
-        'recent_uploads': CSVUpload.objects.all()[:5],
-        'recent_courses': Course.objects.all().order_by('-updated_at')[:5]
+        'total_courses': None,
+        'total_departments': None,
+        'pending_updates': None,
+        'required_actions': None,
+        'recent_uploads': None,
+        'recent_courses': None
     }
     return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
