@@ -1,4 +1,4 @@
-def get_cohort(program_term, academic_term) -> int:
+def get_cohort(program_term, academic_term):
     """
     Given a student's academic term and program term, return their cohort academic term.
     May terms (i.e., terms ending in '20') are skipped in program term progression.
@@ -31,7 +31,7 @@ def get_cohort(program_term, academic_term) -> int:
         if term != 20:
             program_term -= 1
 
-    return year * 100 + term
+    return str(year * 100 + term)
 
 def get_achievement_level(gai_score, question_max):
     """
