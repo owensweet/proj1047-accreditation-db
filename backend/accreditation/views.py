@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import openpyxl
+from openpyxl.workbook import Workbook
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
@@ -242,6 +243,36 @@ def csv_upload_view(request):
             return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
     return render(request, 'bcit_accreditation/csv_upload.html')
+
+def export_view(request):
+    # Data fetching logic goes here: (data = ...)
+    data = [
+        ["val1", "val2", ..., "val25"],  # instance 1
+        ["val1", "val2", ..., "val25"],  # instance 2
+    ]
+
+    field_names = [
+        "Field 1", "Field 2", "Field 3", "Field 4", "Field 5",
+        "Field 6", "Field 7", "Field 8", "Field 9", "Field 10",
+        "Field 11", "Field 12", "Field 13", "Field 14", "Field 15",
+        "Field 16", "Field 17", "Field 18", "Field 19", "Field 20",
+        "Field 21", "Field 22", "Field 23", "Field 24", "Field 25"
+    ]
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Exported Data"
+    ws.append(field_names)
+
+    for row in data:
+        ws.append(row)
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=export.xlsx'
+    wb.save(response)
+    return response
 
 @login_required
 def form_step1_view(request):
