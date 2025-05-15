@@ -107,6 +107,8 @@ class AssessValidity(models.Model):
     total_score = models.IntegerField()
     assess_max = models.IntegerField()
     assess_weight = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    assess_descript = models.CharField(max_length=200)
+    clos = models.CharField(max_length=100)
     gai_score_with_id = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
