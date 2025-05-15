@@ -15,6 +15,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import openpyxl
 from .database import *
+from openpyxl.workbook import Workbook
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
@@ -144,24 +145,44 @@ def admin_dashboard_view(request):
     # # For each user, get their last upload date
     # for user in users:
     #     try:
-            
     #         # Assuming we have a model that tracks uploads with a user foreign key and a date field
-    #         # last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
-    #         # if last_upload:
-    #         #     user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
-    #         # else:
-    #         #     user.last_upload = None
+    #         last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
+    #         if last_upload:
+    #             user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+    #         else:
+    #             user.last_upload = None
     #     except Exception:
     #         user.last_upload = None
     
+    # # Sample data for the database tab
+    # # In a real implementation, you would pull this from your models
+    # database_entries = []
+    
+    # # If a specific table was requested, load that data
+    # table_name = request.GET.get('table', 'data_process')
+    
+    # # Normally you would dynamically load the right model data here
+    # # For example:
+    # # if table_name == 'data_process':
+    # #     entries = DataProcess.objects.all()
+    # # elif table_name == 'faculty_ci':
+    # #     entries = FacultyCI.objects.all()
+    # # ... etc.
+    
     context = {
         'users': users,
-        'total_courses': None,
-        'total_departments': None,
-        'pending_updates': None,
-        'required_actions': None,
+        'total_courses': None,  # Sample data
+        'total_faculty': None,  # Sample data
+        'pending_updates': None,  # Sample data
+        'required_actions': None,  # Sample data
+        # 'database_entries': database_entries,
         'recent_uploads': None,
-        'recent_courses': None
+        'recent_courses': None,
+        'activities': [
+            {'date': '2023-07-15', 'user': 'johndoe', 'action': 'Uploaded course data'},
+            {'date': '2023-07-14', 'user': 'janedoe', 'action': 'Updated faculty records'},
+            {'date': '2023-07-10', 'user': 'admin', 'action': 'System backup'}
+        ]
     }
     return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
 
@@ -223,6 +244,36 @@ def csv_upload_view(request):
             return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
     return render(request, 'bcit_accreditation/csv_upload.html')
+
+def export_view(request):
+    # Data fetching logic goes here: (data = ...)
+    data = [
+        ["val1", "val2", ..., "val25"],  # instance 1
+        ["val1", "val2", ..., "val25"],  # instance 2
+    ]
+
+    field_names = [
+        "Field 1", "Field 2", "Field 3", "Field 4", "Field 5",
+        "Field 6", "Field 7", "Field 8", "Field 9", "Field 10",
+        "Field 11", "Field 12", "Field 13", "Field 14", "Field 15",
+        "Field 16", "Field 17", "Field 18", "Field 19", "Field 20",
+        "Field 21", "Field 22", "Field 23", "Field 24", "Field 25"
+    ]
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Exported Data"
+    ws.append(field_names)
+
+    for row in data:
+        ws.append(row)
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=export.xlsx'
+    wb.save(response)
+    return response
 
 @login_required
 def form_step1_view(request):

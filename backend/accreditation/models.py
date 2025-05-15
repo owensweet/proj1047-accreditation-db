@@ -58,16 +58,15 @@ class FacultyCI(models.Model):
     instr_first_name = models.CharField(max_length=20)
     instr_last_name = models.CharField(max_length=20)
     assess_title = models.CharField(max_length=12)
+    gai_score = models.IntegerField()
     total_score = models.IntegerField()
     cohort = models.CharField(max_length=11)
-    gai_score_with_id = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Course: {self.course} | Term: {self.term} | Instructor First Name: {self.instr_first_name} | "
                 f"Instructor Last Name: {self.instr_last_name} | Assessment Title: {self.assess_title} | "
-                f"Total Score: {self.total_score} | Cohort: {self.cohort} | GAI Scores with Student ID's: "
-                f"{self.gai_score_with_id}")
+                f"Total Score: {self.total_score} | Cohort: {self.cohort} | GAI Score: {self.gai_score}")
 
 
 class ProgramCI(models.Model):
@@ -80,16 +79,16 @@ class ProgramCI(models.Model):
         max_length=4,
         choices=GAI_CHOICES
     )
+    gai_score = models.IntegerField()
     total_score = models.IntegerField()
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
     cohort = models.CharField(max_length=11)
-    gai_score_with_id = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Term: {self.term} | GA: {self.ga} | GAI: {self.gai} | Total Score: "
                 f"{self.total_score} | Achievement Level: {self.achievement_level} | Cohort: {self.cohort} | "
-                f"GAI Scores with Student ID's: {self.gai_score_with_id}")
+                f"GAI Score: {self.gai_score}")
 
 
 class AssessValidity(models.Model):
@@ -104,19 +103,18 @@ class AssessValidity(models.Model):
     course = models.CharField(max_length=9, validators=[MinLengthValidator(9)])
     question_max = models.IntegerField()
     alignment = models.CharField(max_length=9, choices=ALIGNMENT_CHOICES)
+    gai_score = models.IntegerField()
     total_score = models.IntegerField()
     assess_max = models.IntegerField()
     assess_weight = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
     assess_descript = models.CharField(max_length=200)
     clos = models.CharField(max_length=100)
-    gai_score_with_id = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"GAI: {self.gai} | GA: {self.ga} | Course: {self.course} | Question Max: {self.question_max} | "
                 f"Alignment: {self.alignment} | Total Score: {self.total_score} | "
-                f"Assess Max: {self.assess_max} | Assess Weight: {self.assess_weight} | GAI Scores with Student ID's: "
-                f"{self.gai_score_with_id}")
+                f"Assess Max: {self.assess_max} | Assess Weight: {self.assess_weight} | GAI Scores: {self.gai_score}")
 
 
 class AccredReport(models.Model):
@@ -137,14 +135,14 @@ class AccredReport(models.Model):
                                                            ("Intermediate Development", "Intermediate Development"),
                                                            ("Advanced Application", "Advanced Application")])
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
-    gai_score_with_id = models.JSONField()
+    student_id = models.CharField(max_length=9, validators=[MinValueValidator(9)])
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Program: {self.program} | Term: {self.term} | GA: {self.ga} | GAI: {self.gai} | Assessment Type: "
                 f"{self.assess_type} | Question Text: {self.quest_text} | Alignment: {self.alignment} | Instructional "
                 f"Level: {self.instr_level} | Achievement Level: {self.achievement_level} | "
-                f"GAI Scores with Student ID's: {self.gai_score_with_id}")
+                f"Student ID: {self.student_id}")
 
 
 class AnnualReport(models.Model):
@@ -159,17 +157,16 @@ class AnnualReport(models.Model):
         max_length=4,
         choices=GAI_CHOICES
     )
+    student_id = models.CharField(max_length=9, validators=[MinValueValidator(9)])
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
     assess_type = models.CharField(max_length=15, choices=ASSESSMENT_TYPE_CHOICES)
     instr_comments = models.CharField(max_length=800)
-    gai_score_with_id = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Program: {self.program} | Term: {self.term} | Course: {self.course} | GA: {self.ga} | GAI: {self.gai}"
-                f" | Achievement Level: {self.achievement_level} | Assessment Type: "
-                f"{self.assess_type} | Instructor Comments: {self.instr_comments} | GAI Scores with Student ID's: "
-                f"{self.gai_score_with_id}")
+                f" | Achievement Level: {self.achievement_level} | Assessment Type: {self.assess_type} | Instructor "
+                f"Comments: {self.instr_comments} | Student ID: {self.student_id}")
     
 class Faculty(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

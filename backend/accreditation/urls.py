@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
     path('csv-upload/', views.csv_upload_view, name='csv_upload'),
+    path('export/', views.export_view, name='export'),
     
     # Multi-step form pages
     path('form/step1/', views.form_step1_view, name='form_step1'),
