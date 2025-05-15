@@ -22,7 +22,8 @@ from .models import (
     ProgramCI,
     AssessValidity,
     AccredReport,
-    AnnualReport
+    AnnualReport,
+    Faculty,
 )
 
 
@@ -103,6 +104,7 @@ def register_user(request):
 
         # Create user and save it in the database
         user = User.objects.create_user(username=username, email=email, password=password1)
+        # Faculty.objects.create(user=user, last_uploaded=None) add this later back after migration
         user.save()
         login(request, user)
         return redirect('home')
