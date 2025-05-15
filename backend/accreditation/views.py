@@ -203,7 +203,7 @@ def csv_upload_view(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
-    return render(request, 'bcit_accreditation/test.html')
+    return render(request, 'bcit_accreditation/csv_upload.html')
 
 @login_required
 def form_step1_view(request):
