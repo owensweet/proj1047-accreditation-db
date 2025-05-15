@@ -8,15 +8,15 @@
 
 <div class="container">
     <div class="form-wrapper">
-        <h1>CSV Upload</h1>
-        <p class="form-description">Use this page to upload course data in CSV format to the BCIT Accreditation System.</p>
+        <h1>Excel File Upload</h1>
+        <p class="form-description">Use this page to upload course data in XLSX format to the BCIT Accreditation System.</p>
 
         <form id="csvUploadForm" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-grid">
                 <div class="form-column">
-                    <label for="csv_file">Select CSV File</label>
-                    <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+                    <label for="csv_file">Select Excel File</label>
+                    <input type="file" id="csv_file" name="csv_file" accept=".xlsx" required>
                 </div>
                 <div class="form-column">
                     <label for="file_type">Data Type</label>
@@ -100,12 +100,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const fileType = fileTypeSelect.value;
 
         if (!file) {
-            showStatus('Please select a CSV file to upload.', 'danger');
+            showStatus('Please select a XLSX file to upload.', 'danger');
             return;
         }
 
-        if (!file.name.endsWith('.csv')) {
-            showStatus('File must be in CSV format.', 'danger');
+        if (!file.name.endsWith('.xlsx')) {
+            showStatus('File must be in XLSX format.', 'danger');
             return;
         }
 
