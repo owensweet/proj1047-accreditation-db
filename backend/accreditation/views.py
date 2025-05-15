@@ -130,7 +130,24 @@ def home_view(request):
     return render(request, 'bcit_accreditation/bcit_accred_home.html', context)
 
 @login_required
-def test_upload_view(request):
+@user_passes_test(is_admin)
+def admin_dashboard_view(request):
+    """
+    Display the admin dashboard (admin only)
+    """
+    # Get counts for dashboard stats
+    context = {
+        'total_courses': None,
+        'total_departments': None,
+        'pending_updates': None,
+        'required_actions': None,
+        'recent_uploads': None,
+        'recent_courses': None
+    }
+    return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
+
+@login_required
+def csv_upload_view(request):
     """
     Handle CSV or XLSX file upload and extract student data.
     """
@@ -187,62 +204,6 @@ def test_upload_view(request):
             return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
     return render(request, 'bcit_accreditation/test.html')
-
-@login_required
-@user_passes_test(is_admin)
-def admin_dashboard_view(request):
-    """
-    Display the admin dashboard (admin only)
-    """
-    # Get counts for dashboard stats
-    context = {
-        'total_courses': None,
-        'total_departments': None,
-        'pending_updates': None,
-        'required_actions': None,
-        'recent_uploads': None,
-        'recent_courses': None
-    }
-    return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
-
-@login_required
-def csv_upload_view(request):
-    """
-    Handle CSV file uploads
-    """
-    if request.method == 'POST' and request.FILES.get('csv_file'):
-        uploaded_file = request.FILES['csv_file']
-        file_type = request.POST.get('file_type')
-        
-        # Check if file is a CSV
-        if not uploaded_file.name.endswith('.csv'):
-            return JsonResponse({'success': False, 'message': 'File is not a CSV'})
-        
-        # Check file type
-        if not file_type:
-            return JsonResponse({'success': False, 'message': 'Data type not specified'})
-        
-        try:
-            # Process the CSV file (this is a simplified version)
-            file_content = uploaded_file.read().decode('utf-8')
-            csvfile = io.StringIO(file_content)
-            rows = list(csv.reader(csvfile))
-            
-            # Here is where we put where we process the file based on its type
-            # For now, just return success
-            
-            return JsonResponse({
-                'success': True, 
-                'message': f'File successfully uploaded as {file_type} data!'
-            })
-        except Exception as e:
-            return JsonResponse({
-                'success': False, 
-                'message': f'Error processing file: {str(e)}'
-            })
-    
-    context = {}
-    return render(request, 'bcit_accreditation/csv_upload.html', context)
 
 @login_required
 def form_step1_view(request):
