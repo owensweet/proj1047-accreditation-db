@@ -27,6 +27,19 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
     line-height: 1.6;
+    animation: fadeInSmooth 1s ease-in-out; /* THIS IS THE ANIMATION LINE FOR FUTURE REFERECE */
+
+    
+}
+@keyframes fadeInSmooth {
+    from {
+        opacity: 0;
+        transform: scale(0.99); /* Slight scale-in effect */
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Used to stretch main content to push footer to bottom */
@@ -71,7 +84,7 @@ body {
 }
 
 .auth-buttons a:hover {
-    background-color: var(--bcit-blue);
+    background-color: var(--secondary-accent);
     color: white;
     text-decoration: none;
 }
@@ -555,7 +568,6 @@ body {
     align-items: center;
 }
 
-/* View Button at the bottom */
 .view-button-custom {
     margin-top: 1rem; /* Adds space above the button */
     margin-bottom: 1rem; /* Adds space below the button */
@@ -569,11 +581,15 @@ body {
     width: 70%;
     text-align: center;
     font-size: 0.9rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7); /* Correct shadow effect */
 }
 
 .view-button-custom:hover {
-    background-color: #519a51;
+    background-color: #5faa5f; /* Slightly darker shade on hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+    transform: translateY(-3px); /* Moves it up by 5 pixels */
 }
+
 
 
 

@@ -97,7 +97,7 @@
             }
         }
         
-        // Handle form submission - store data and navigate to next page (F3)
+        // Handle form submission - store data and navigate to next page
         form.addEventListener('submit', function(event) {
             event.preventDefault();
             
@@ -111,7 +111,7 @@
             // Store in session storage
             sessionStorage.setItem('f2FormData', JSON.stringify(formData));
             
-            // Navigate to next page (F3)
+            // Navigate to next page (F3 - now combines the old F3 and F4)
             window.location.href = '{% url "form_step3" %}';
         });
         
