@@ -23,7 +23,6 @@ from .models import (
     AssessValidity,
     AccredReport,
     AnnualReport,
-    CSVUpload
 )
 
 
