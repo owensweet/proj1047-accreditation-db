@@ -256,8 +256,16 @@ def download_student_assessment_view(request):
 def export_view(request):
     # Data fetching logic goes here: (data = ...)
     data = [
-        ["val1", "val2", ..., "val25"],  # instance 1
-        ["val1", "val2", ..., "val25"],  # instance 2
+        [f"val{i + 1}_1" for i in range(25)],  # instance 1
+        [f"val{i + 1}_2" for i in range(25)],  # instance 2
+        [f"val{i + 1}_3" for i in range(25)],  # instance 3
+        [f"val{i + 1}_4" for i in range(25)],  # instance 4
+        [f"val{i + 1}_5" for i in range(25)],  # instance 5
+        [f"val{i + 1}_6" for i in range(25)],  # instance 6
+        [f"val{i + 1}_7" for i in range(25)],  # instance 7
+        [f"val{i + 1}_8" for i in range(25)],  # instance 8
+        [f"val{i + 1}_9" for i in range(25)],  # instance 9
+        [f"val{i + 1}_10" for i in range(25)]  # instance 10
     ]
 
     field_names = [
