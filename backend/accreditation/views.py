@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 import openpyxl
+from .database import *
 from openpyxl.workbook import Workbook
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
