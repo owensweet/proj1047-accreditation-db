@@ -10,8 +10,6 @@ urlpatterns = [
     path('register_user/', views.register_user, name='register_user'),
     path('logout/', views.logout_user, name='logout'),
     path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
-    path('test/', views.test_upload_view, name='test_upload'),
-    # path('csv-upload/', views.test_upload_view, name='csv_upload'),
     path('csv-upload/', views.csv_upload_view, name='csv_upload'),
     
     # Multi-step form pages
