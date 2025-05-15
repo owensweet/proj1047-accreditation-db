@@ -21,9 +21,7 @@ urlpatterns = [
     path('form/submit/', views.form_submit_view, name='form_submit'),
     
     # Analytics page
-    path('analytics/', views.analytics_view, name='analytics'),
+    # path('analytics/', views.analytics_view, name='analytics'),
+    path('analysis/', views.analysis_view, name='analysis'),
     
-    # Course pages
-    path('courses/', views.courses_view, name='courses'),
-    path('course/<int:course_id>/', views.course_details_view, name='course_details'),
 ]

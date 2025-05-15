@@ -22,7 +22,8 @@ from .models import (
     ProgramCI,
     AssessValidity,
     AccredReport,
-    AnnualReport
+    AnnualReport,
+    CSVUpload
 )
 
 
@@ -135,8 +136,24 @@ def admin_dashboard_view(request):
     """
     Display the admin dashboard (admin only)
     """
-    # Get counts for dashboard stats
+    # Get all users except the current admin
+    users = User.objects.exclude(id=request.user.id).order_by('username')
+    
+    # # For each user, get their last upload date
+    # for user in users:
+    #     try:
+            
+    #         # Assuming we have a model that tracks uploads with a user foreign key and a date field
+    #         # last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
+    #         # if last_upload:
+    #         #     user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+    #         # else:
+    #         #     user.last_upload = None
+    #     except Exception:
+    #         user.last_upload = None
+    
     context = {
+        'users': users,
         'total_courses': None,
         'total_departments': None,
         'pending_updates': None,
@@ -255,24 +272,16 @@ def form_submit_view(request):
     # If not POST, redirect to form step 1
     return redirect('form_step1')
 
-@login_required
-def courses_view(request):
-    """
-    Display the courses listing page
-    """
-    return render(request, 'bcit_accreditation/courses.html')
+# @login_required
+# def analytics_view(request):
+#     """
+#     Display analytics dashboard
+#     """
+#     return render(request, 'bcit_accreditation/analytics.html')
 
 @login_required
-def course_details_view(request, course_id):
+def analysis_view(request):
     """
-    Display course details
+    Display the new analytics/analysis dashboard with Tableau visualizations
     """
-    context = {'course_id': course_id}
-    return render(request, 'bcit_accreditation/bcit_accred_course_details.html', context)
-
-@login_required
-def analytics_view(request):
-    """
-    Display analytics dashboard
-    """
-    return render(request, 'bcit_accreditation/analytics.html')
+    return render(request, 'bcit_accreditation/bcit_accred_analysis.html')
