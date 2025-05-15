@@ -185,12 +185,13 @@
                  oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
                  title="Assessment total score should be a whole number">
 
-          <label for="gaiWeight">GAI weight (%of assessment)</label>
-          <input type="number" id="gaiWeight" name="gaiWeight" min="1" max="100" required
-                 title="GAI weight should be between 1 and 100">
-
           <label for="gaiMaxPoints">GAI max points</label>
           <input type="number" id="gaiMaxPoints" name="gaiMaxPoints" min="0" step="1" required
+                 oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
+                 title="GAI max points should be a whole number">
+
+          <label for="gai_score">GAI score</label>
+          <input type="number" id="gai_score" name="gai_score" min="0" step="1" required
                  oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
                  title="GAI max points should be a whole number">
         </div>
