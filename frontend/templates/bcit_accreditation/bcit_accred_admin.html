@@ -439,13 +439,13 @@
         const tableSelector = document.getElementById('table-selector');
         if (tableSelector) {
             tableSelector.addEventListener('change', function() {
-                // This would normally make an AJAX call to fetch the selected table data
-                // For now we'll just show a placeholder message
+                // Normally make an AJAX call to fetch the selected table data
+                // For now it just shows a placeholder message
                 const tableBody = document.getElementById('data-table-body');
                 tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading data for ' + 
                     this.options[this.selectedIndex].text + '...</td></tr>';
                 
-                // In a real implementation, you would fetch data from the server here
+                // for final real implementation, we need to fetch data from the server here
                 // and update the table with the new data
             });
         }
