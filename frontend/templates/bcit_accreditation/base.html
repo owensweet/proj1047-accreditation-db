@@ -33,8 +33,8 @@
         <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
         <a href="{% url 'courses' %}" class="{% if 'courses' in request.path %}active{% endif %}">Courses</a>
         <a href="{% url 'analytics' %}" class="{% if 'analytics' in request.path %}active{% endif %}">Analytics</a>
-        <a href="{% url 'csv_upload' %}" class="{% if 'csv-upload' in request.path %}active{% endif %}">CSV Upload</a>
-        {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'form_step1' %}" class="{% if 'form/step1' in request.path %}active{% endif %}">Upload Data</a>
+        {% if user.is_staff or user.is_superuser %}  <!-- change this to correct perms and for courses aswell maybe? -->
             <a href="{% url 'admin_dashboard' %}" class="{% if 'admin-dashboard' in request.path %}active{% endif %}">Admin Dashboard</a>
         {% endif %}
     </div>
