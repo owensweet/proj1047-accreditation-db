@@ -272,21 +272,6 @@ def form_submit_view(request):
     # If not POST, redirect to form step 1
     return redirect('form_step1')
 
-@login_required
-def courses_view(request):
-    """
-    Display the courses listing page
-    """
-    return render(request, 'bcit_accreditation/courses.html')
-
-@login_required
-def course_details_view(request, course_id):
-    """
-    Display course details
-    """
-    context = {'course_id': course_id}
-    return render(request, 'bcit_accreditation/bcit_accred_course_details.html', context)
-
 # @login_required
 # def analytics_view(request):
 #     """

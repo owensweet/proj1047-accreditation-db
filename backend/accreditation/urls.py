@@ -24,7 +24,4 @@ urlpatterns = [
     # path('analytics/', views.analytics_view, name='analytics'),
     path('analysis/', views.analysis_view, name='analysis'),
     
-    # Course pages
-    path('courses/', views.courses_view, name='courses'),
-    path('course/<int:course_id>/', views.course_details_view, name='course_details'),
 ]
