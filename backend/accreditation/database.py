@@ -12,6 +12,7 @@ from .models import (
 )
 
 def upload_data(program, course, term, prog_term, ):
+    # Validate data here
     DataprocessDAO.insert
 
 class DataProcessDAO:
