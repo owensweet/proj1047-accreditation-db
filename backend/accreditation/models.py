@@ -45,6 +45,8 @@ class DataProcess(models.Model):
         max_length=4,
         choices=GAI_CHOICES
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f"Term: {self.term} | Program: {self.program} | Course: {self.course} | GAI: {self.gai}"
 
@@ -58,6 +60,7 @@ class FacultyCI(models.Model):
     total_score = models.IntegerField()
     cohort = models.CharField(max_length=11)
     gai_score_with_id = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Course: {self.course} | Term: {self.term} | Instructor First Name: {self.instr_first_name} | "
@@ -80,6 +83,7 @@ class ProgramCI(models.Model):
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
     cohort = models.CharField(max_length=11)
     gai_score_with_id = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Term: {self.term} | GA: {self.ga} | GAI: {self.gai} | Total Score: "
@@ -103,6 +107,7 @@ class AssessValidity(models.Model):
     assess_max = models.IntegerField()
     assess_weight = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
     gai_score_with_id = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"GAI: {self.gai} | GA: {self.ga} | Course: {self.course} | Question Max: {self.question_max} | "
@@ -130,6 +135,7 @@ class AccredReport(models.Model):
                                                            ("Advanced Application", "Advanced Application")])
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
     gai_score_with_id = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Program: {self.program} | Term: {self.term} | GA: {self.ga} | GAI: {self.gai} | Assessment Type: "
@@ -154,6 +160,7 @@ class AnnualReport(models.Model):
     assess_type = models.CharField(max_length=15, choices=ASSESSMENT_TYPE_CHOICES)
     instr_comments = models.CharField(max_length=800)
     gai_score_with_id = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return (f"Program: {self.program} | Term: {self.term} | Course: {self.course} | GA: {self.ga} | GAI: {self.gai}"
