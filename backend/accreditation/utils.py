@@ -1,4 +1,4 @@
-def get_cohort(program_term: int, academic_term: int) -> int:
+def get_cohort(program_term, academic_term) -> int:
     """
     Given a student's academic term and program term, return their cohort academic term.
     May terms (i.e., terms ending in '20') are skipped in program term progression.
@@ -7,6 +7,9 @@ def get_cohort(program_term: int, academic_term: int) -> int:
     :param academic_term: int in form YYYYTT (e.g., 202530 = 2025 September).
     :return: int cohort academic term (e.g., 202430).
     """
+    program_term = int(program_term)
+    academic_term = int(academic_term)
+
     if program_term < 1 or program_term > 8:
         raise ValueError("Program term must be between 1 and 8.")
 
