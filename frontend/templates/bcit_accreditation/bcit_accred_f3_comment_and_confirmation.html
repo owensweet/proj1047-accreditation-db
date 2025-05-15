@@ -50,8 +50,9 @@
 
             <div class="comment-field">
                 <label for="assessmentComments">Comments on the assessment results</label>
-                <textarea id="assessmentComments" name="assessmentComments" maxlength="500" placeholder="If the results indicate a high percentage of students marginally meeting or below expectations, please comment on whether any changes or resources are required for students to succeed. [DNI]" required></textarea>
-                <div class="char-counter"><span id="commentsCounter">0</span>/500</div>
+                <textarea id="assessmentComments" name="assessmentComments" maxlength="800" 
+                          placeholder="If the results indicate a high percentage of students marginally meeting or below expectations, please comment on whether any changes or resources are required for students to succeed." required></textarea>
+                <div class="char-counter"><span id="commentsCounter">0</span>/800</div>
             </div>
         </form>
     </div>
@@ -79,14 +80,22 @@
         // Buttons
         const backButton = document.getElementById('backButton');
         const submitButton = document.getElementById('submitButton');
-
-        // Set up character counting for comments
+        
+        // Ensure maxLength is properly set
+        commentsField.maxLength = 800;
+        
+        // Update the character counter
         function updateCharCounter() {
-            commentsCounter.textContent = commentsField.value.length;
+            if (commentsCounter && commentsField) {
+                commentsCounter.textContent = commentsField.value.length;
+            }
         }
         
         // Add input listener to update character count
         commentsField.addEventListener('input', updateCharCounter);
+        
+        // Initialize the counter
+        updateCharCounter();
         
         // Load previously stored comment data if available
         if (sessionStorage.getItem('f3FormData')) {
@@ -98,15 +107,34 @@
             }
         }
 
-        // CSV file change handler
+        // CSV file change handler with better validation
         csvFileInput.addEventListener('change', function(e) {
             if (this.files && this.files[0]) {
                 const file = this.files[0];
+                
+                // Validate file type
+                if (!file.name.toLowerCase().endsWith('.csv')) {
+                    alert('Please upload a valid CSV file with .csv extension');
+                    this.value = ''; // Clear the file input
+                    csvFileInfo.textContent = 'No file selected';
+                    return;
+                }
+                
+                // File size validation (optional, max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size too large. Please upload a file smaller than 5MB');
+                    this.value = ''; // Clear the file input
+                    csvFileInfo.textContent = 'No file selected';
+                    return;
+                }
+                
                 csvFileInfo.textContent = `Selected file: ${file.name} (${Math.round(file.size / 1024)} KB)`;
-                sessionStorage.setItem('csvFileName', file.name);
+                
+                // Read file content
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     sessionStorage.setItem('csvFileContent', e.target.result);
+                    sessionStorage.setItem('csvFileName', file.name);
                 };
                 reader.readAsText(file);
             } else {
@@ -125,6 +153,7 @@
 
             html += '<h3>Course and GA Information</h3><div>';
             if (Object.keys(f1Data).length > 0) {
+                // Display all F1 data
                 html += `<div><span>Program:</span> <span>${f1Data.program || ''}</span></div>`;
                 html += `<div><span>Course:</span> <span>${f1Data.course || ''}</span></div>`;
                 html += `<div><span>Academic Term:</span> <span>${f1Data.academicTerm || ''}</span></div>`;
@@ -137,9 +166,10 @@
                 html += `<div><span>Assessment Alignment:</span> <span>${f1Data.assessmentAlignment || ''}</span></div>`;
                 html += `<div><span>Course Learning Outcomes:</span> <span>${f1Data.courseLearningOutcomes || ''}</span></div>`;
                 html += `<div><span>Assessment Type:</span> <span>${f1Data.assessmentType || ''}</span></div>`;
-                html += `<div><span>Course Weighting:</span> <span>${f1Data.courseWeighting || ''}</span></div>`;
+                html += `<div><span>Course Weighting:</span> <span>${f1Data.courseWeighting || ''}%</span></div>`;
                 html += `<div><span>Assessment Max Score:</span> <span>${f1Data.assessmentMaxScore || ''}</span></div>`;
-                html += `<div><span>GAI Weight:</span> <span>${f1Data.gaiWeight || ''}</span></div>`;
+                html += `<div><span>Assessment Total Score:</span> <span>${f1Data.assessmentTotalScore || ''}</span></div>`;
+                html += `<div><span>GAI Weight:</span> <span>${f1Data.gaiWeight || ''}%</span></div>`;
                 html += `<div><span>GAI Max Points:</span> <span>${f1Data.gaiMaxPoints || ''}</span></div>`;
             } else {
                 html += '<p>No course and GA information available</p>';
@@ -174,14 +204,35 @@
             window.location.href = '{% url "form_step2" %}';
         });
 
-        // Handle submit button
+        // Handle submit button with comprehensive validation
         submitButton.addEventListener('click', function() {
-            // Check if CSV file is uploaded
+            // Form validation
+            if (!commentsField.value.trim()) {
+                alert('Please provide comments on the assessment results');
+                commentsField.focus();
+                return;
+            }
+            
+            // CSV file validation
             if (!csvFileInput.files || !csvFileInput.files[0]) {
                 alert('Please upload a CSV file first');
                 return;
             }
-
+            
+            // Check if we have all required data from previous steps
+            const f1Data = JSON.parse(sessionStorage.getItem('f1FormData') || '{}');
+            const f2Data = JSON.parse(sessionStorage.getItem('f2FormData') || '{}');
+            
+            if (Object.keys(f1Data).length === 0) {
+                alert('Missing Course and GA Information. Please go back to step 1.');
+                return;
+            }
+            
+            if (Object.keys(f2Data).length === 0) {
+                alert('Missing Assessment Information. Please go back to step 2.');
+                return;
+            }
+            
             // Save comment data
             const commentData = {
                 assessmentComments: commentsField.value
@@ -194,8 +245,8 @@
 
             // Combine all data from F1, F2, and F3
             const allData = {
-                ...JSON.parse(sessionStorage.getItem('f1FormData') || '{}'),
-                ...JSON.parse(sessionStorage.getItem('f2FormData') || '{}'),
+                ...f1Data,
+                ...f2Data,
                 ...commentData
             };
 
@@ -215,8 +266,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // Clear all session data on successful submission
                     sessionStorage.clear();
-                    window.location.href = '{% url "form_success" %}';  // Reference the new f4 page
+                    window.location.href = '{% url "form_success" %}';
                 } else {
                     alert('Error: ' + data.message);
                 }

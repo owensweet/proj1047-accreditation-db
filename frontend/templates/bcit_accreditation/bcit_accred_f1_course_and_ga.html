@@ -44,10 +44,10 @@
           <label for="programTerm">Program term</label>
           <select id="programTerm" name="programTerm" required>
             <option value="" disabled selected>Click to select</option>
-            <option value="Term 1">Term 1</option>
-            <option value="Term 2">Term 2</option>
-            <option value="Term 3">Term 3</option>
-            <option value="Term 4">Term 4</option>
+            <option value="1">Term 1</option>
+            <option value="2">Term 2</option>
+            <option value="3">Term 3</option>
+            <option value="4">Term 4</option>
           </select>
 
           <label for="facultyFirstName1">Faculty first name</label>
@@ -143,21 +143,23 @@
           </select>
 
           <label for="courseLearningOutcomes">Course learning outcome(s)</label>
-          <select id="courseLearningOutcomes" name="courseLearningOutcomes" required>
-            <option value="" disabled selected>Click to select</option>
-            <option value="outcome1">Outcome 1</option>
-            <option value="outcome2">Outcome 2</option>
-          </select>
+          <input type="text" id="courseLearningOutcomes" name="courseLearningOutcomes" 
+                 maxlength="100" required placeholder="Describe course learning outcomes">
 
           <label for="assessmentType">Assessment type</label>
           <select id="assessmentType" name="assessmentType" required>
             <option value="" disabled selected>Click to select</option>
-            <option value="Quiz">Quiz</option>
-            <option value="Test">Test</option>
-            <option value="Exam">Exam</option>
             <option value="Assignment">Assignment</option>
             <option value="Project">Project</option>
-            <option value="Lab">Lab</option>
+            <option value="Lab report">Lab report</option>
+            <option value="Presentation">Presentation</option>
+            <option value="Peer-Assessment">Peer-Assessment</option>
+            <option value="Final exam">Final exam</option>
+            <option value="Mid-term">Mid-term</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Homework">Homework</option>
+            <option value="Self-Assessment">Self-Assessment</option>
+            <option value="Other">Other</option>
           </select>
 
           <label for="courseWeighting">Course % weighting</label>
@@ -315,6 +317,37 @@
         this.value = this.value.substring(0, 6);
       }
     });
+
+    // Update the courseLearningOutcomes field if it's a dropdown
+    const courseLearningOutcomesField = document.getElementById('courseLearningOutcomes');
+    if (courseLearningOutcomesField.tagName === 'SELECT') {
+      // Store the current value before replacing
+      const currentValue = courseLearningOutcomesField.value;
+      
+      // Get the parent element
+      const parent = courseLearningOutcomesField.parentNode;
+      
+      // Create a new input field
+      const inputField = document.createElement('input');
+      inputField.type = 'text';
+      inputField.id = 'courseLearningOutcomes';
+      inputField.name = 'courseLearningOutcomes';
+      inputField.maxLength = 100;
+      inputField.placeholder = 'Describe course learning outcomes';
+      inputField.required = true;
+      
+      // Replace the select with the input
+      parent.replaceChild(inputField, courseLearningOutcomesField);
+      
+      // Restore any stored data to the new field
+      const storedData = JSON.parse(sessionStorage.getItem('f1FormData') || '{}');
+      if (storedData.courseLearningOutcomes) {
+        inputField.value = storedData.courseLearningOutcomes;
+      } else if (currentValue && currentValue !== '') {
+        // If no stored data but there was a selected value, use that
+        inputField.value = currentValue;
+      }
+    }
   });
 </script>
 {% endblock %}

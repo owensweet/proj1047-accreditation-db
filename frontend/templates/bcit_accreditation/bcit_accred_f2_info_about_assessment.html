@@ -22,15 +22,17 @@
                 <!-- Assessment Title Field -->
                 <div class="form-column">
                     <label for="assessmentTitle">Assessment title</label>
-                    <input type="text" id="assessmentTitle" name="assessmentTitle" maxlength="150" placeholder="e.g. Lab 3 - Circuit Analysis" required>
-                    <div><span id="assessmentTitleCounter">0</span>/150</div>
+                    <input type="text" id="assessmentTitle" name="assessmentTitle" maxlength="12" 
+                           placeholder="e.g. Lab 3" required>
+                    <div><span id="assessmentTitleCounter">0</span>/12</div>
                 </div>
 
                 <!-- Assessment Description Field -->
                 <div class="form-column">
                     <label for="assessmentDescription">Assessment description</label>
-                    <textarea id="assessmentDescription" name="assessmentDescription" maxlength="250" placeholder="Provide here a short description of the assessment [DNI]" required></textarea>
-                    <div><span id="assessmentDescriptionCounter">0</span>/250</div>
+                    <textarea id="assessmentDescription" name="assessmentDescription" maxlength="200" 
+                              placeholder="Provide here a short description of the assessment" required></textarea>
+                    <div><span id="assessmentDescriptionCounter">0</span>/200</div>
                 </div>
             </div>
 
@@ -38,8 +40,9 @@
                 <!-- Question Text Field -->
                 <div class="form-column">
                     <label for="questionText">Question text</label>
-                    <textarea id="questionText" name="questionText" maxlength="500" placeholder="Provide here the text of the requirement in the assessment. Limit description to 800 characters [DNI]" required></textarea>
-                    <div><span id="questionTextCounter">0</span>/500</div>
+                    <textarea id="questionText" name="questionText" maxlength="400" 
+                              placeholder="Provide here the text of the requirement in the assessment. Limit description to 400 characters" required></textarea>
+                    <div><span id="questionTextCounter">0</span>/400</div>
                 </div>
             </div>
 
@@ -67,15 +70,35 @@
         const descCounter = document.getElementById('assessmentDescriptionCounter');
         const questionCounter = document.getElementById('questionTextCounter');
         
-        // Set up character counting
+        // Update maxlength attributes to match database constraints
+        assessmentTitle.maxLength = 12;
+        assessmentDescription.maxLength = 200;
+        questionText.maxLength = 400;
+        
+        // Character count function
         function updateCharCounter(field, counter) {
-            counter.textContent = field.value.length;
+            if (field && counter) {
+                counter.textContent = field.value.length;
+            }
         }
         
-        // Add input listeners to update character counts
-        assessmentTitle.addEventListener('input', () => updateCharCounter(assessmentTitle, titleCounter));
-        assessmentDescription.addEventListener('input', () => updateCharCounter(assessmentDescription, descCounter));
-        questionText.addEventListener('input', () => updateCharCounter(questionText, questionCounter));
+        // Initialize counters with current values
+        updateCharCounter(assessmentTitle, titleCounter);
+        updateCharCounter(assessmentDescription, descCounter);
+        updateCharCounter(questionText, questionCounter);
+        
+        // Add input listeners
+        assessmentTitle.addEventListener('input', function() {
+            updateCharCounter(assessmentTitle, titleCounter);
+        });
+        
+        assessmentDescription.addEventListener('input', function() {
+            updateCharCounter(assessmentDescription, descCounter);
+        });
+        
+        questionText.addEventListener('input', function() {
+            updateCharCounter(questionText, questionCounter);
+        });
         
         // Load previously stored data if available
         if (sessionStorage.getItem('f2FormData')) {
@@ -111,13 +134,12 @@
             // Store in session storage
             sessionStorage.setItem('f2FormData', JSON.stringify(formData));
             
-            // Navigate to next page (F3 - now combines the old F3 and F4)
+            // Navigate to next page
             window.location.href = '{% url "form_step3" %}';
         });
         
         // Handle back button - navigate back to F1
         document.getElementById('backButton').addEventListener('click', function() {
-            // Navigate back to F1
             window.location.href = '{% url "form_step1" %}';
         });
     });
