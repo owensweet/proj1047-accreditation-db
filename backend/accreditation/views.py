@@ -287,9 +287,16 @@ def course_details_view(request, course_id):
     context = {'course_id': course_id}
     return render(request, 'bcit_accreditation/bcit_accred_course_details.html', context)
 
+# @login_required
+# def analytics_view(request):
+#     """
+#     Display analytics dashboard
+#     """
+#     return render(request, 'bcit_accreditation/analytics.html')
+
 @login_required
-def analytics_view(request):
+def analysis_view(request):
     """
-    Display analytics dashboard
+    Display the new analytics/analysis dashboard with Tableau visualizations
     """
-    return render(request, 'bcit_accreditation/analytics.html')
+    return render(request, 'bcit_accreditation/bcit_accred_analysis.html')

@@ -1,0 +1,113 @@
+/* Main container for the entire analysis page */
+.analysismain {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #000;
+    box-sizing: border-box;
+}
+
+/* Page title */
+.analysis-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #173d68;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Tab navigation */
+.analysis-tabs {
+    display: flex;
+    border-bottom: 2px solid #173d68;
+    margin-bottom: 20px;
+}
+
+.analysis-tab {
+    padding: 10px 20px;
+    margin-right: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.analysis-tab.active {
+    background-color: #173d68;
+    color: white;
+    border-color: #173d68;
+}
+
+/* Tab content container */
+.analysis-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 0 5px 5px;
+}
+
+.analysis-content.active {
+    display: block;
+}
+
+/* Visualization containers */
+.visualization-container {
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Title for each visualization */
+.visualization-title {
+    padding: 10px 15px;
+    background-color: #173d68;
+    color: white;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+/* The actual visualization area */
+.tableau-container {
+    height: 600px;
+    width: 100%;
+    background-color: #f9f9f9;
+}
+
+/* Loading indicator */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.spinner {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #173d68;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error message */
+.error-message {
+    padding: 20px;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin: 10px 0;
+}
