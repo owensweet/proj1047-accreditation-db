@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 
 
 GAI_CHOICES = [
@@ -167,3 +168,10 @@ class AnnualReport(models.Model):
                 f" | Achievement Level: {self.achievement_level} | Assessment Type: "
                 f"{self.assess_type} | Instructor Comments: {self.instr_comments} | GAI Scores with Student ID's: "
                 f"{self.gai_score_with_id}")
+    
+class Faculty(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    last_updated = models.DateTimeField()
+
+    def __str__(self):
+        return self.user.username
