@@ -10,11 +10,72 @@
     .stats-card:hover {
         transform: translateY(-5px);
     }
+    
+    /* Sorting styles */
+    .sortable {
+        cursor: pointer;
+        user-select: none;
+    }
+    .sortable:hover {
+        background-color: #f0f0f0;
+    }
+    .sortable::after {
+        content: ' ↕';
+        font-size: 0.8em;
+        color: #999;
+    }
+    .sort-asc::after {
+        content: ' ↑';
+        color: #333;
+    }
+    .sort-desc::after {
+        content: ' ↓';
+        color: #333;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <h2 class="mb-4">Admin Dashboard</h2>
+
+<!-- Replace thhis first row with a User Table -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">User Management</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="sortable" data-sort="username">Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th class="sortable" data-sort="last_upload">Last Upload Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                {% if users %}
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.profile.role|default:"Member" }}</td>
+                            <td>{{ user.last_upload|default:"No uploads" }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No users found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-3">
@@ -136,6 +197,75 @@
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 <script>
-    // Admin dashboard specific JavaScript can go here
+
+    // Handle table sorting, sort by username (ascending/descending) and last upload date (ascending/descending)
+    // Add event listeners to sortable headers and sort table when clicked
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableHeaders = document.querySelectorAll('th.sortable');
+        let sortField = null;
+        let sortDirection = 'asc';
+        
+        tableHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const field = this.dataset.sort;
+                
+                // Toggle direction if same field clicked again
+                if (field === sortField) {
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortField = field;
+                    sortDirection = 'asc';
+                }
+                
+                // Update UI to show sorting state
+                tableHeaders.forEach(h => {
+                    h.classList.remove('sort-asc', 'sort-desc');
+                });
+                
+                this.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                
+                // Sort the table
+                sortTable(field, sortDirection);
+            });
+        });
+        
+        function sortTable(field, direction) {
+            const tbody = document.getElementById('user-table-body');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            if (rows.length <= 1) return; // No need to sort if only one or no rows
+            
+            rows.sort((a, b) => {
+                let valueA, valueB;
+                
+                if (field === 'username') {
+                    valueA = a.cells[0].textContent.trim().toLowerCase();
+                    valueB = b.cells[0].textContent.trim().toLowerCase();
+                } else if (field === 'last_upload') {
+                    // Handle "No uploads" text
+                    const dateA = a.cells[3].textContent.trim();
+                    const dateB = b.cells[3].textContent.trim();
+                    
+                    valueA = dateA === 'No uploads' ? '1900-01-01' : dateA;
+                    valueB = dateB === 'No uploads' ? '1900-01-01' : dateB;
+                }
+                
+                // Standard comparison
+                if (valueA < valueB) return direction === 'asc' ? -1 : 1;
+                if (valueA > valueB) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // Remove all rows from table
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+            
+            // Add sorted rows
+            rows.forEach(row => {
+                tbody.appendChild(row);
+            });
+        }
+    });
 </script>
 {% endblock %}
