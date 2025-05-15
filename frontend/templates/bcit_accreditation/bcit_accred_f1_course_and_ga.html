@@ -32,10 +32,14 @@
           </select>
 
           <label for="course">Course</label>
-          <input type="text" id="course" name="course" placeholder="e.g. ENGR 3800 [DNI]" required>
+          <input type="text" id="course" name="course" placeholder="e.g. ELEX 3240" required 
+                 pattern="^[A-Za-z]{4}\s?[0-9]{4}$" maxlength="9" 
+                 title="Course code should be 4 letters followed by 4 digits (e.g. ELEX 3240)">
 
           <label for="academicTerm">Academic term</label>
-          <input type="text" id="academicTerm" name="academicTerm" placeholder="e.g. 202510 [DNI]" required>
+          <input type="text" id="academicTerm" name="academicTerm" placeholder="e.g. 202510" required 
+                 pattern="^[0-9]{6}$" maxlength="6"
+                 title="Academic term should be a 6-digit number (e.g. 202510)">
 
           <label for="programTerm">Program term</label>
           <select id="programTerm" name="programTerm" required>
@@ -47,10 +51,14 @@
           </select>
 
           <label for="facultyFirstName1">Faculty first name</label>
-          <input type="text" id="facultyFirstName1" name="facultyFirstName1" required>
+          <input type="text" id="facultyFirstName1" name="facultyFirstName1" required 
+                 maxlength="20" pattern="^[A-Za-z\s\-'\.]+$"
+                 title="Faculty name should only contain letters, spaces, hyphens, apostrophes, or periods">
 
           <label for="facultyFirstName2">Faculty first name</label>
-          <input type="text" id="facultyFirstName2" name="facultyFirstName2" required>
+          <input type="text" id="facultyFirstName2" name="facultyFirstName2" required 
+                 maxlength="20" pattern="^[A-Za-z\s\-'\.]+$"
+                 title="Faculty name should only contain letters, spaces, hyphens, apostrophes, or periods">
 
           <label for="graduateAttribute">Graduate attribute</label>
           <select id="graduateAttribute" name="graduateAttribute" required>
@@ -135,12 +143,11 @@
           </select>
 
           <label for="courseLearningOutcomes">Course learning outcome(s)</label>
-            <select id="courseLearningOutcomes" name="courseLearningOutcomes" required>
+          <select id="courseLearningOutcomes" name="courseLearningOutcomes" required>
             <option value="" disabled selected>Click to select</option>
             <option value="outcome1">Outcome 1</option>
             <option value="outcome2">Outcome 2</option>
-            </select>
-
+          </select>
 
           <label for="assessmentType">Assessment type</label>
           <select id="assessmentType" name="assessmentType" required>
@@ -154,19 +161,27 @@
           </select>
 
           <label for="courseWeighting">Course % weighting</label>
-          <input type="number" id="courseWeighting" name="courseWeighting" min="0" max="100" required>
+          <input type="number" id="courseWeighting" name="courseWeighting" min="1" max="100" required
+                 title="Course weighting should be between 1 and 100">
 
           <label for="assessmentMaxScore">Assessment max score points</label>
-          <input type="number" id="assessmentMaxScore" name="assessmentMaxScore" min="0" step="0.1" required>
+          <input type="number" id="assessmentMaxScore" name="assessmentMaxScore" min="0" step="1" required
+                 oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
+                 title="Assessment max score should be a whole number">
 
           <label for="assessmentTotalScore">Assessment total score</label>
-          <input type="number" id="assessmentTotalScore" name="assessmentTotalScore" min="0" step="0.1" required>
+          <input type="number" id="assessmentTotalScore" name="assessmentTotalScore" min="0" step="1" required
+                 oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
+                 title="Assessment total score should be a whole number">
 
           <label for="gaiWeight">GAI weight (%of assessment)</label>
-          <input type="number" id="gaiWeight" name="gaiWeight" min="0" max="100" required>
+          <input type="number" id="gaiWeight" name="gaiWeight" min="1" max="100" required
+                 title="GAI weight should be between 1 and 100">
 
           <label for="gaiMaxPoints">GAI max points</label>
-          <input type="number" id="gaiMaxPoints" name="gaiMaxPoints" min="0" step="0.1" required>
+          <input type="number" id="gaiMaxPoints" name="gaiMaxPoints" min="0" step="1" required
+                 oninput="this.value = this.value.indexOf('.') >= 0 ? this.value.substr(0, this.value.indexOf('.')) : this.value"
+                 title="GAI max points should be a whole number">
         </div>
       </div>
 
@@ -243,7 +258,12 @@
       for (let i = 0; i < formElements.length; i++) {
         const element = formElements[i];
         if (element.name && element.name !== 'csrfmiddlewaretoken' && element.type !== 'submit' && element.type !== 'button') {
-          formData[element.id] = element.value;
+          // For integer fields, ensure we store integers
+          if (integerFields.includes(element.id) && element.value.includes('.')) {
+            formData[element.id] = Math.floor(parseFloat(element.value));
+          } else {
+            formData[element.id] = element.value;
+          }
         }
       }
 
@@ -254,6 +274,46 @@
     document.getElementById('backButton').addEventListener('click', function() {
       sessionStorage.removeItem('f1FormData');
       window.location.href = '{% url "home" %}';
+    });
+
+    // Add additional validation for integer fields
+    const integerFields = ['assessmentMaxScore', 'assessmentTotalScore', 'gaiMaxPoints'];
+    
+    integerFields.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      field.addEventListener('blur', function() {
+        if (this.value.includes('.')) {
+          this.value = Math.floor(parseFloat(this.value));
+        }
+      });
+    });
+    
+    // Add validation for course code format
+    const courseField = document.getElementById('course');
+    courseField.addEventListener('blur', function() {
+      if (this.value) {
+        // Format: Convert to uppercase, ensure proper spacing
+        let formattedValue = this.value.toUpperCase().trim();
+        
+        // If it's a valid format but missing space, add it
+        if (/^[A-Z]{4}[0-9]{4}$/.test(formattedValue)) {
+          formattedValue = formattedValue.substr(0, 4) + ' ' + formattedValue.substr(4);
+        }
+        
+        this.value = formattedValue;
+      }
+    });
+    
+    // Add validation for academic term
+    const termField = document.getElementById('academicTerm');
+    termField.addEventListener('input', function() {
+      // Only allow numbers
+      this.value = this.value.replace(/[^\d]/g, '');
+      
+      // Limit to 6 digits
+      if (this.value.length > 6) {
+        this.value = this.value.substring(0, 6);
+      }
     });
   });
 </script>

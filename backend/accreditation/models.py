@@ -170,7 +170,7 @@ class AnnualReport(models.Model):
     
 class Faculty(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    last_updated = models.DateTimeField()
+    last_uploaded = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

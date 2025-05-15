@@ -31,7 +31,6 @@
 <nav class="main-nav">
     <div class="nav-links">
         <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-        <a href="{% url 'courses' %}" class="{% if 'courses' in request.path %}active{% endif %}">Courses</a>
         <a href="{% url 'analysis' %}" class="{% if 'analysis' in request.path %}active{% endif %}">Analytics</a>
         <a href="{% url 'form_step1' %}" class="{% if 'form/step1' in request.path %}active{% endif %}">Upload Data</a>
         {% if user.is_staff or user.is_superuser %}<!-- change this to correct perms and for courses aswell maybe? -->

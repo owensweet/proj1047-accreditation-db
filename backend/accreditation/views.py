@@ -23,6 +23,7 @@ from .models import (
     AssessValidity,
     AccredReport,
     AnnualReport,
+    Faculty,
 )
 
 
@@ -103,6 +104,7 @@ def register_user(request):
 
         # Create user and save it in the database
         user = User.objects.create_user(username=username, email=email, password=password1)
+        # Faculty.objects.create(user=user, last_uploaded=None) add this later back after migration
         user.save()
         login(request, user)
         return redirect('home')
@@ -141,24 +143,44 @@ def admin_dashboard_view(request):
     # # For each user, get their last upload date
     # for user in users:
     #     try:
-            
     #         # Assuming we have a model that tracks uploads with a user foreign key and a date field
-    #         # last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
-    #         # if last_upload:
-    #         #     user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
-    #         # else:
-    #         #     user.last_upload = None
+    #         last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
+    #         if last_upload:
+    #             user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+    #         else:
+    #             user.last_upload = None
     #     except Exception:
     #         user.last_upload = None
     
+    # # Sample data for the database tab
+    # # In a real implementation, you would pull this from your models
+    # database_entries = []
+    
+    # # If a specific table was requested, load that data
+    # table_name = request.GET.get('table', 'data_process')
+    
+    # # Normally you would dynamically load the right model data here
+    # # For example:
+    # # if table_name == 'data_process':
+    # #     entries = DataProcess.objects.all()
+    # # elif table_name == 'faculty_ci':
+    # #     entries = FacultyCI.objects.all()
+    # # ... etc.
+    
     context = {
         'users': users,
-        'total_courses': None,
-        'total_departments': None,
-        'pending_updates': None,
-        'required_actions': None,
+        'total_courses': None,  # Sample data
+        'total_faculty': None,  # Sample data
+        'pending_updates': None,  # Sample data
+        'required_actions': None,  # Sample data
+        # 'database_entries': database_entries,
         'recent_uploads': None,
-        'recent_courses': None
+        'recent_courses': None,
+        'activities': [
+            {'date': '2023-07-15', 'user': 'johndoe', 'action': 'Uploaded course data'},
+            {'date': '2023-07-14', 'user': 'janedoe', 'action': 'Updated faculty records'},
+            {'date': '2023-07-10', 'user': 'admin', 'action': 'System backup'}
+        ]
     }
     return render(request, 'bcit_accreditation/bcit_accred_admin.html', context)
 
