@@ -140,18 +140,18 @@ def admin_dashboard_view(request):
     # Get all users except the current admin
     users = User.objects.exclude(id=request.user.id).order_by('username')
     
-    # For each user, get their last upload date
-    for user in users:
-        try:
+    # # For each user, get their last upload date
+    # for user in users:
+    #     try:
             
-            # Assuming we have a model that tracks uploads with a user foreign key and a date field
-            last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
-            if last_upload:
-                user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
-            else:
-                user.last_upload = None
-        except Exception:
-            user.last_upload = None
+    #         # Assuming we have a model that tracks uploads with a user foreign key and a date field
+    #         # last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
+    #         # if last_upload:
+    #         #     user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+    #         # else:
+    #         #     user.last_upload = None
+    #     except Exception:
+    #         user.last_upload = None
     
     context = {
         'users': users,
