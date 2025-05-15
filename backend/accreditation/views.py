@@ -1,8 +1,11 @@
+import os
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, FileResponse
+from django.conf import settings
 from django.urls import reverse
 from django.db.models import Q
 import csv
@@ -243,6 +246,11 @@ def csv_upload_view(request):
             return JsonResponse({'success': False, 'message': f'Error processing file: {str(e)}'})
 
     return render(request, 'bcit_accreditation/csv_upload.html')
+
+def download_student_assessment_view(request):
+    file_path = os.path.join(settings.BASE_DIR, 'references', 'Individual Student Assessment Data.xlsx')
+
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename='Individual Student Assessment Data.xlsx')
 
 def export_view(request):
     # Data fetching logic goes here: (data = ...)
