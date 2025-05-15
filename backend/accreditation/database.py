@@ -11,7 +11,23 @@ from .models import (
     AnnualReport
 )
 
-def upload_data(program, course, term, prog_term, ):
+from .utils import *
+
+def upload_data(program: str,
+                course: str,
+                term: str,
+                prog_term: int,
+                instr_first_name: str,
+                instr_last_name: str,
+                ga: str,
+                gai: str,
+                instr_level: str,
+                allignment: str,
+                clos: str,
+                assess_type: str,
+                assess_weight: float,
+                assess_max: int,
+                total_score: float  ):
     # Validate data here
     DataprocessDAO.insert
 
