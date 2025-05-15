@@ -104,3 +104,9 @@ body {
   background-color: #1c47aa;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
+
+#graduateAttributeIndicator {
+  width: 100%;
+  max-width: 800px;
+  overflow: auto;
+}
