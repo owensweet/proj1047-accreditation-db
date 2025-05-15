@@ -48,6 +48,10 @@
             <option value="2">Term 2</option>
             <option value="3">Term 3</option>
             <option value="4">Term 4</option>
+            <option value="5">Term 5</option>
+            <option value="6">Term 6</option>
+            <option value="7">Term 7</option>
+            <option value="8">Term 8</option>
           </select>
 
           <label for="facultyFirstName1">Faculty first name</label>
@@ -55,7 +59,7 @@
                  maxlength="20" pattern="^[A-Za-z\s\-'\.]+$"
                  title="Faculty name should only contain letters, spaces, hyphens, apostrophes, or periods">
 
-          <label for="facultyFirstName2">Faculty first name</label>
+          <label for="facultyFirstName2">Faculty last name</label>
           <input type="text" id="facultyFirstName2" name="facultyFirstName2" required 
                  maxlength="20" pattern="^[A-Za-z\s\-'\.]+$"
                  title="Faculty name should only contain letters, spaces, hyphens, apostrophes, or periods">
@@ -63,13 +67,18 @@
           <label for="graduateAttribute">Graduate attribute</label>
           <select id="graduateAttribute" name="graduateAttribute" required>
             <option value="" disabled selected>Click to select</option>
-            <option value="Knowledge Base">Knowledge Base</option>
-            <option value="Problem Analysis">Problem Analysis</option>
-            <option value="Investigation">Investigation</option>
-            <option value="Design">Design</option>
-            <option value="Use of Tools">Use of Tools</option>
-            <option value="Communication">Communication</option>
-            <option value="Teamwork">Teamwork</option>
+            <option value="GA1 Knowledge base for engineering">GA1 Knowledge base for engineering</option>
+            <option value="GA2 Problem Analysis">GA2 Problem Analysis</option>
+            <option value="GA3 Investigation">GA3 Investigation</option>
+            <option value="GA4 Design">GA4 Design</option>
+            <option value="GA5 Use of Engineering Tools">GA5 Use of Engineering Tools</option>
+            <option value="GA6 Individual and Team Work">GA6 Individual and Team Work</option>
+            <option value="GA7 Communication Skills">GA7 Communication Skills</option>
+            <option value="GA8 Professionalism">GA8 Professionalism</option>
+            <option value="GA9 Impact of Engineering on Society and the Environment">GA9 Impact of Engineering on Society and the Environment</option>
+            <option value="GA10 Ethics and Equity">GA10 Ethics and Equity</option>
+            <option value="GA11 Economics and Project Management">GA11 Economics and Project Management</option>
+            <option value="GA12 Life-long Learning">GA12 Life-long Learning</option>
           </select>
 
           <label for="graduateAttributeIndicator">Graduate attribute indicator</label>
@@ -117,7 +126,7 @@
             <option value=11.2>11.2 Identifies risks to the schedule and budget, and devises strategies to manage these risks.</option>
             <option value=11.3>11.3 Applies economic principles to support decision making based on economic analysis.</option>
             <option value=12.1>12.1 Identifies deficiencies or gaps in knowledge and demonstrates an ability to source information to close this gap.</option>
-            <option value=12.2>2.2 Critically evaluates procured information for authority, currency, and objectivity.</option>
+            <option value=12.2>12.2 Critically evaluates procured information for authority, currency, and objectivity.</option>
             <option value=12.3>12.3 Engages in professional development activities to maintain currency in field of practice.</option>
             <option value=12.4>12.4 Recognizes that licensure requires continued professional development and currency, and participates in professional and academic societies.</option>
           </select>
@@ -215,40 +224,32 @@
     const gaSelect = document.getElementById('graduateAttribute');
     const gaiSelect = document.getElementById('graduateAttributeIndicator');
 
+    // Add this after loading stored data to ensure GAI options are filtered
+    if (gaSelect.value) {
+      // Trigger the change event to filter GAI options based on saved GA
+      gaSelect.dispatchEvent(new Event('change'));
+    }
+
     gaSelect.addEventListener('change', function() {
-      gaiSelect.innerHTML = '<option value="" disabled selected>Click to select</option>';
-      const ga = this.value;
-      let indicators = [];
-
-      switch (ga) {
-        case 'Knowledge Base':
-          indicators = ['KB1: Apply knowledge of mathematics', 'KB2: Apply knowledge of physics', 'KB3: Apply knowledge of engineering fundamentals'];
-          break;
-        case 'Problem Analysis':
-          indicators = ['PA1: Identify the problem', 'PA2: Formulate the problem', 'PA3: Analyze the problem'];
-          break;
-        case 'Investigation':
-          indicators = ['IN1: Plan investigations', 'IN2: Conduct investigations', 'IN3: Analyze data'];
-          break;
-        case 'Design':
-          indicators = ['DE1: Define design problems', 'DE2: Generate design solutions', 'DE3: Test and refine designs'];
-          break;
-        case 'Use of Tools':
-          indicators = ['UT1: Select appropriate tools', 'UT2: Use tools effectively', 'UT3: Create new tools when needed'];
-          break;
-        case 'Communication':
-          indicators = ['CO1: Written communication', 'CO2: Oral communication', 'CO3: Visual communication'];
-          break;
-        case 'Teamwork':
-          indicators = ['TW1: Operate in team roles', 'TW2: Manage team dynamics', 'TW3: Lead teams effectively'];
-          break;
-      }
-
-      indicators.forEach(indicator => {
-        const option = document.createElement('option');
-        option.value = indicator;
-        option.textContent = indicator;
-        gaiSelect.appendChild(option);
+      // Reset the indicator dropdown selection
+      gaiSelect.selectedIndex = 0;
+      
+      // Extract the GA number from the selected option
+      const selectedGA = this.value;
+      const gaNumber = selectedGA.match(/GA(\d+)/)?.[1];
+      
+      if (!gaNumber) return;
+      
+      // Show/hide options based on the selected graduate attribute
+      Array.from(gaiSelect.options).forEach(option => {
+        if (option.value === '') return; // Skip the placeholder option
+        
+        // Show only options that start with the selected GA number
+        if (option.value.toString().startsWith(gaNumber + '.')) {
+          option.style.display = '';
+        } else {
+          option.style.display = 'none';
+        }
       });
     });
 

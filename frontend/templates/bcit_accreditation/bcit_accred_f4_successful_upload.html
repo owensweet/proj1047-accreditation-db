@@ -9,6 +9,11 @@
 
 {% block content %}
 <div class="f4container">
+    <!-- Download Button Container -->
+    <div class="download-button-container">
+        <a href="{% url 'download_assessment' %}" class="download-button">Download Student Assessment Data File</a>
+    </div>
+
     <!-- Success Message Container -->
     <div class="success-container">
         <h2>Upload successful</h2>
@@ -24,16 +29,18 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Clear all session storage data for the multi-step form
+        // Clear form data but keep CSV file information
         sessionStorage.removeItem('f1FormData');
         sessionStorage.removeItem('f2FormData');
         sessionStorage.removeItem('f3FormData');
-        sessionStorage.removeItem('csvFileName');
-        sessionStorage.removeItem('csvFileContent');
         
-        // Add click handler for home button (although not strictly necessary)
+        // CSV file content is preserved for download
+        
+        // Add click handler for home button - clear CSV data when going home
         document.getElementById('homeButton').addEventListener('click', function() {
-            // We could do additional cleanup here if needed
+            // Clean up CSV data when returning to home
+            sessionStorage.removeItem('csvFileName');
+            sessionStorage.removeItem('csvFileContent');
             window.location.href = '{% url "home" %}';
         });
     });
