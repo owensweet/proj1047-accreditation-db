@@ -41,6 +41,7 @@ PROGRAM_CHOICES = [('ELEX', 'ELEX'), ('CIVL', 'CIVL'), ('MECH', 'MECH'),('MINE',
 class DataProcess(models.Model):
     term = models.CharField(max_length=6, validators=[MinLengthValidator(6)])
     program = models.CharField(max_length=4, choices=PROGRAM_CHOICES)
+
     course = models.CharField(max_length=9, validators=[MinLengthValidator(9)])
     gai = models.CharField(
         max_length=4,
@@ -83,6 +84,7 @@ class ProgramCI(models.Model):
     total_score = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.01), MaxValueValidator(999.99)])
     achievement_level = models.DecimalField(max_digits=5, decimal_places=2)
     cohort = models.CharField(max_length=11)
+    prog_term = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)])
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

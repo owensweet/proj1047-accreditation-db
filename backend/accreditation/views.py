@@ -146,31 +146,30 @@ def admin_dashboard_view(request):
     users = User.objects.exclude(id=request.user.id).order_by('username')
     
     # # For each user, get their last upload date
-    # for user in users:
-    #     try:
-    #         # Assuming we have a model that tracks uploads with a user foreign key and a date field
-    #         last_upload = CSVUpload.objects.filter(user=user).order_by('-upload_date').first()
-    #         if last_upload:
-    #             user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
-    #         else:
-    #             user.last_upload = None
-    #     except Exception:
-    #         user.last_upload = None
+    for user in users:
+        try:
+            # Assuming we have a model that tracks uploads with a user foreign key and a date field
+            last_upload = Faculty.objects.filter(user=user).order_by('-last_uploaded').first()
+            if last_upload:
+                user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+            else:
+                user.last_upload = None
+        except Exception:
+            user.last_upload = None
+
+    # If laggy try get_flattened_data_paginated
+    database_entries = get_flattened_data
     
-    # # Sample data for the database tab
-    # # In a real implementation, you would pull this from your models
-    # database_entries = []
+    # If a specific table was requested, load that data
+    table_name = request.GET.get('table', 'data_process')
     
-    # # If a specific table was requested, load that data
-    # table_name = request.GET.get('table', 'data_process')
-    
-    # # Normally you would dynamically load the right model data here
-    # # For example:
-    # # if table_name == 'data_process':
-    # #     entries = DataProcess.objects.all()
-    # # elif table_name == 'faculty_ci':
-    # #     entries = FacultyCI.objects.all()
-    # # ... etc.
+    # Normally you would dynamically load the right model data here
+    # For example:
+    # if table_name == 'data_process':
+    #     entries = DataProcess.objects.all()
+    # elif table_name == 'faculty_ci':
+    #     entries = FacultyCI.objects.all()
+    # ... etc.
     
     context = {
         'users': users,
