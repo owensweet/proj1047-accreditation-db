@@ -109,7 +109,7 @@ def register_user(request):
 
         # Create user and save it in the database
         user = User.objects.create_user(username=username, email=email, password=password1)
-        # Faculty.objects.create(user=user, last_uploaded=None) add this later back after migration
+        Faculty.objects.create(user=user, last_uploaded=None)
         user.save()
         login(request, user)
         return redirect('home')
@@ -157,7 +157,6 @@ def admin_dashboard_view(request):
         except Exception:
             user.last_upload = None
 
-    # If laggy try get_flattened_data_paginated
     database_entries = get_flattened_data
     
     # If a specific table was requested, load that data
@@ -193,8 +192,8 @@ def csv_upload_view(request):
     """
     Handle CSV or XLSX file upload and extract student data.
     """
-    if request.method == 'POST' and request.FILES.get('xlsx_file'):
-        uploaded_file = request.FILES['xlsx_file']
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        uploaded_file = request.FILES['csv_file']
         file_name = uploaded_file.name.lower()
 
         try:
