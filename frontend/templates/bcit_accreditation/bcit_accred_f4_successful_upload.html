@@ -8,20 +8,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="f4container">
-    <!-- Download Button Container -->
-    <div class="download-button-container">
-        <a href="{% url 'download_assessment' %}" class="download-button">Download Student Assessment Data File</a>
-    </div>
+<div class="blue-wrapper">
+    <div class="f4container">
+        <!-- Success Message Container -->
+        <div class="success-container">
+            <h2>Upload successful</h2>
+        </div>
 
-    <!-- Success Message Container -->
-    <div class="success-container">
-        <h2>Upload successful</h2>
-    </div>
+        <!-- Download Button Container (Moved below the success message) -->
+        <div class="download-button-container">
+            <a href="{% url 'download_assessment' %}" class="download-button">Download Student Assessment Data File</a>
+        </div>
 
-    <!-- Home Button -->
-    <div class="home-button-container">
-        <a href="{% url 'home' %}" id="homeButton" class="home-button">Home</a>
+        <!-- Home Button -->
+        <div class="home-button-container">
+            <a href="{% url 'home' %}" id="homeButton" class="home-button">Home</a>
+        </div>
     </div>
 </div>
 {% endblock %}
