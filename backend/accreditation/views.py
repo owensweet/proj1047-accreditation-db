@@ -193,8 +193,8 @@ def csv_upload_view(request):
     """
     Handle CSV or XLSX file upload and extract student data.
     """
-    if request.method == 'POST' and request.FILES.get('csv_file'):
-        uploaded_file = request.FILES['csv_file']
+    if request.method == 'POST' and request.FILES.get('xlsx_file'):
+        uploaded_file = request.FILES['xlsx_file']
         file_name = uploaded_file.name.lower()
 
         try:

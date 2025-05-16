@@ -8,15 +8,15 @@
 
 <div class="container">
     <div class="form-wrapper">
-        <h1>CSV Upload</h1>
-        <p class="form-description">Use this page to upload course data in CSV format to the BCIT Accreditation System.</p>
+        <h1>Excel File Upload</h1>
+        <p class="form-description">Use this page to upload course data in XLSX format to the BCIT Accreditation System.</p>
 
         <form id="csvUploadForm" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-grid">
                 <div class="form-column">
-                    <label for="csv_file">Select CSV File</label>
-                    <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+                    <label for="xlsx_file">Select Excel File</label>
+                    <input type="file" id="xlsx_file" name="xlsx_file" accept=".csv, .xlsx" required>
                 </div>
                 <div class="form-column">
                     <label for="file_type">Data Type</label>
@@ -31,7 +31,7 @@
             </div>
 
             <div class="button-row">
-                <button type="submit">Upload CSV</button>
+                <button type="submit">Upload Excel File</button>
             </div>
         </form>
 
@@ -94,20 +94,21 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const fileInput = document.getElementById('csv_file');
+        const fileInput = document.getElementById('xlsx_file');
         const fileTypeSelect = document.getElementById('file_type');
         const file = fileInput.files[0];
         const fileType = fileTypeSelect.value;
 
         if (!file) {
-            showStatus('Please select a CSV file to upload.', 'danger');
+            showStatus('Please select a XLSX file to upload.', 'danger');
             return;
         }
 
-        if (!file.name.endsWith('.csv')) {
-            showStatus('File must be in CSV format.', 'danger');
+        if (!file.name.endsWith('.csv') && !file.name.endsWith('.xlsx')) {
+            showStatus('File must be in .csv or .xlsx format.', 'danger');
             return;
         }
+
 
         if (!fileType) {
             showStatus('Please select a data type.', 'danger');
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const formData = new FormData();
-        formData.append('csv_file', file);
+        formData.append('xlsx_file', file);
         formData.append('file_type', fileType);
         formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
 
