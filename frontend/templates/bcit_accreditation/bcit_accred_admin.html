@@ -236,7 +236,6 @@
                                 <th>Email</th>
                                 <th>Role</th>
                                 <th class="sortable" data-sort="last_upload">Last Upload Date</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="user-table-body">
@@ -247,14 +246,11 @@
                                         <td>{{ user.email }}</td>
                                         <td>{{ user.profile.role|default:"Faculty" }}</td>
                                         <td>{{ user.last_upload|default:"No uploads" }}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-primary">View</button>
-                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td colspan="5" class="text-center">No users found</td>
+                                    <td colspan="4" class="text-center">No users found</td>
                                 </tr>
                             {% endif %}
                         </tbody>
