@@ -61,11 +61,20 @@
     .database-table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
+    }
+    
+    .database-table th, .database-table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px; /* Limit column width */
     }
     
     .database-table th {
         position: sticky;
         top: 0;
+        z-index: 10;
         background-color: #173d68;
         color: white;
         padding: 10px;
@@ -144,6 +153,48 @@
     .export-btn i {
         margin-right: 8px;
     }
+    
+    /* Pagination styling */
+    .pagination-controls {
+        margin-top: 15px;
+    }
+    
+    .pagination-controls button {
+        margin: 0 5px;
+    }
+    
+    #current-page {
+        margin: 0 10px;
+        font-weight: bold;
+    }
+    
+    /* Loading indicator */
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 {% endblock %}
 
@@ -172,9 +223,11 @@
         <div id="users-tab" class="tab-content active">
             <!-- User Management Table -->
             <div class="card mb-4">
+
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">User Management</h5>
                 </div>
+
                 <div class="card-body">
                     <table class="table table-striped table-hover">
                         <thead>
@@ -207,68 +260,19 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
-            <!-- Stats Cards Row -->
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card bg-primary text-white mb-4 stats-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Courses</h5>
-                            <h2 class="display-4">{{ total_courses|default:"0" }}</h2>
-                        </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-success text-white mb-4 stats-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Faculty Members</h5>
-                            <h2 class="display-4">{{ total_faculty|default:"0" }}</h2>
-                        </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-warning text-white mb-4 stats-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Pending Updates</h5>
-                            <h2 class="display-4">{{ pending_updates|default:"0" }}</h2>
-                        </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card bg-danger text-white mb-4 stats-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Required Actions</h5>
-                            <h2 class="display-4">{{ required_actions|default:"0" }}</h2>
-                        </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between">
-                            <a class="small text-white stretched-link" href="#">View Details</a>
-                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div>   
 
             <!-- Recent Activities and Admin Tools -->
             <div class="row">
                 <div class="col-md-6">
                     <div class="card mb-4">
+
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
                             Recent Activities
                         </div>
+
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
@@ -297,42 +301,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-cogs me-1"></i>
-                            Administrative Tools
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    Manage Users
-                                    <span class="badge bg-primary rounded-pill">→</span>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    Course Management
-                                    <span class="badge bg-primary rounded-pill">→</span>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    Accreditation Reports
-                                    <span class="badge bg-primary rounded-pill">→</span>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    System Settings
-                                    <span class="badge bg-primary rounded-pill">→</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
         
         <!-- Database Tab Content -->
         <div id="database-tab" class="tab-content">
             <div class="card mb-4">
+
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Database Explorer</h5>
+                    <h5 class="mb-0">Full Database Explorer</h5>
                     <div>
                         <select id="table-selector" class="form-select form-select-sm">
                             <option value="data_process">Data Process</option>
@@ -344,18 +322,35 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="card-body p-0">
                     <div class="database-container">
                         <table class="database-table" id="data-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                    <th>Created</th>
-                                    <th>Updated</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th class="sortable" data-sort="id">ID</th>
+                                    <th class="sortable" data-sort="term">Term</th>
+                                    <th class="sortable" data-sort="program">Program</th>
+                                    <th class="sortable" data-sort="course">Course</th>
+                                    <th class="sortable" data-sort="prog_term">Program Term</th>
+                                    <th class="sortable" data-sort="instr_first_name">Faculty First Name</th>
+                                    <th class="sortable" data-sort="instr_last_name">Faculty Last Name</th>
+                                    <th class="sortable" data-sort="ga">Graduate Attribute</th>
+                                    <th class="sortable" data-sort="gai">GAI</th>
+                                    <th class="sortable" data-sort="instr_level">Instructional Level</th>
+                                    <th class="sortable" data-sort="alignment">Assessment Alignment</th>
+                                    <th class="sortable" data-sort="clos">Course Learning Outcomes</th>
+                                    <th class="sortable" data-sort="assess_type">Assessment Type</th>
+                                    <th class="sortable" data-sort="assess_weight">Assessment Weight</th>
+                                    <th class="sortable" data-sort="assess_max">Assessment Max Score</th>
+                                    <th class="sortable" data-sort="total_score">Total Score</th>
+                                    <th class="sortable" data-sort="question_max">Question Max</th>
+                                    <th class="sortable" data-sort="gai_score">GAI Score</th>
+                                    <th class="sortable" data-sort="assess_title">Assessment Title</th>
+                                    <th class="sortable" data-sort="assess_descript">Assessment Description</th>
+                                    <th class="sortable" data-sort="quest_text">Question Text</th>
+                                    <th class="sortable" data-sort="student_id">Student ID</th>
+                                    <th class="sortable" data-sort="instr_comments">Comments</th>
                                 </tr>
                             </thead>
                             <tbody id="data-table-body">
@@ -363,24 +358,57 @@
                                     {% for entry in database_entries %}
                                         <tr>
                                             <td>{{ entry.id }}</td>
-                                            <td>{{ entry.name }}</td>
-                                            <td>{{ entry.value }}</td>
-                                            <td>{{ entry.created_at }}</td>
-                                            <td>{{ entry.updated_at }}</td>
-                                            <td>{{ entry.status }}</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary">View</button>
-                                                <button class="btn btn-sm btn-outline-warning">Edit</button>
-                                            </td>
+                                            <td>{{ entry.term }}</td>
+                                            <td>{{ entry.program }}</td>
+                                            <td>{{ entry.course }}</td>
+                                            <td>{{ entry.prog_term }}</td>
+                                            <td>{{ entry.instr_first_name }}</td>
+                                            <td>{{ entry.instr_last_name }}</td>
+                                            <td>{{ entry.ga }}</td>
+                                            <td>{{ entry.gai }}</td>
+                                            <td>{{ entry.instr_level }}</td>
+                                            <td>{{ entry.alignment }}</td>
+                                            <td>{{ entry.clos }}</td>
+                                            <td>{{ entry.assess_type }}</td>
+                                            <td>{{ entry.assess_weight }}</td>
+                                            <td>{{ entry.assess_max }}</td>
+                                            <td>{{ entry.total_score }}</td>
+                                            <td>{{ entry.question_max }}</td>
+                                            <td>{{ entry.gai_score }}</td>
+                                            <td>{{ entry.assess_title }}</td>
+                                            <td>{{ entry.assess_descript }}</td>
+                                            <td>{{ entry.quest_text }}</td>
+                                            <td>{{ entry.student_id }}</td>
+                                            <td>{{ entry.instr_comments }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="7" class="text-center">No database entries found</td>
+                                        <td colspan="23" class="text-center">No database entries found</td>
                                     </tr>
                                 {% endif %}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Add pagination controls -->
+                <div class="pagination-controls mt-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <span>Showing <span id="showing-start">1</span>-<span id="showing-end">10</span> of <span id="total-records">0</span> records</span>
+                    </div>
+                    <div>
+                        <button id="prev-page" class="btn btn-sm btn-outline-primary" disabled>&laquo; Previous</button>
+                        <span id="current-page">Page 1</span>
+                        <button id="next-page" class="btn btn-sm btn-outline-primary">Next &raquo;</button>
+                    </div>
+                    <div>
+                        <select id="page-size" class="form-select form-select-sm">
+                            <option value="10">10 per page</option>
+                            <option value="25">25 per page</option>
+                            <option value="50">50 per page</option>
+                            <option value="100">100 per page</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -480,24 +508,80 @@
         }
         
         // Table selector for database tab
+        let currentPage = 1;
+        let pageSize = 10;
+        let totalPages = 1;
+        let totalRecords = 0;
+        let currentTable = 'data_process';
+        let sortColumn = 'id';
+        let sortOrder = 'asc';
+
         const tableSelector = document.getElementById('table-selector');
         if (tableSelector) {
             tableSelector.addEventListener('change', function() {
-                // Normally make an AJAX call to fetch the selected table data
-                // For now it just shows a placeholder message
-                const tableBody = document.getElementById('data-table-body');
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading data for ' + 
-                    this.options[this.selectedIndex].text + '...</td></tr>';
-                
-                // For real implementation, fetch data from the server
-                loadTableData(this.value);
+                currentTable = this.value;
+                currentPage = 1; // Reset to first page
+                loadTableData();
             });
         }
-        
+
+        // Pagination controls
+        document.getElementById('prev-page').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadTableData();
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', function() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadTableData();
+            }
+        });
+
+        document.getElementById('page-size').addEventListener('change', function() {
+            pageSize = parseInt(this.value);
+            currentPage = 1; // Reset to first page
+            loadTableData();
+        });
+
+        // Sorting functionality for database table
+        document.querySelectorAll('#data-table th.sortable').forEach(header => {
+            header.addEventListener('click', function() {
+                const column = this.dataset.sort;
+                
+                // Toggle sort order or set new column
+                if (column === sortColumn) {
+                    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortColumn = column;
+                    sortOrder = 'asc';
+                }
+                
+                // Update UI to show sorting state
+                document.querySelectorAll('#data-table th').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                });
+                
+                this.classList.add(sortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
+                
+                // Reload data with new sorting
+                loadTableData();
+            });
+        });
+
+        // Initial data load
+        loadTableData();
+
         // Function to load table data via AJAX
-        function loadTableData(tableName) {
-            // In a real implementation, this would make an AJAX call
-            fetch(`/api/data/${tableName}`)
+        function loadTableData() {
+            showLoading();
+            
+            // Construct the API URL with pagination and sorting parameters
+            const url = `/api/data/${currentTable}?page=${currentPage}&page_size=${pageSize}&sort_by=${sortColumn}&sort_order=${sortOrder}`;
+            
+            fetch(url)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -505,44 +589,91 @@
                     return response.json();
                 })
                 .then(data => {
-                    updateDataTable(data);
+                    hideLoading();
+                    updateDataTable(data.results);
+                    updatePagination(data.pagination);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
+                    hideLoading();
                     document.getElementById('data-table-body').innerHTML = 
-                        '<tr><td colspan="7" class="text-center">Error loading data. Please try again.</td></tr>';
+                        '<tr><td colspan="18" class="text-center">Error loading data. Please try again.</td></tr>';
                 });
         }
-        
+
+        // Function to show loading overlay
+        function showLoading() {
+            const container = document.querySelector('.database-container');
+            const existingOverlay = container.querySelector('.loading-overlay');
+            
+            if (!existingOverlay) {
+                const overlay = document.createElement('div');
+                overlay.className = 'loading-overlay';
+                overlay.innerHTML = '<div class="spinner"></div>';
+                container.style.position = 'relative';
+                container.appendChild(overlay);
+            }
+        }
+
+        // Function to hide loading overlay
+        function hideLoading() {
+            const overlay = document.querySelector('.loading-overlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+
+        // Function to update pagination info
+        function updatePagination(pagination) {
+            if (!pagination) return;
+            
+            totalPages = pagination.total_pages;
+            totalRecords = pagination.total_records;
+            
+            document.getElementById('showing-start').textContent = pagination.start_record;
+            document.getElementById('showing-end').textContent = pagination.end_record;
+            document.getElementById('total-records').textContent = pagination.total_records;
+            document.getElementById('current-page').textContent = `Page ${currentPage}`;
+            
+            // Enable/disable prev/next buttons
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage >= totalPages;
+        }
+
         // Function to update the data table with new data
         function updateDataTable(data) {
             const tableBody = document.getElementById('data-table-body');
             tableBody.innerHTML = '';
             
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No data available</td></tr>';
+            if (!data || data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="18" class="text-center">No data available</td></tr>';
                 return;
             }
             
-            data.forEach(item => {
+            data.forEach(entry => {
                 const row = document.createElement('tr');
                 
-                // Create table cells based on the data
-                for (const key in item) {
-                    if (key !== 'id' && key !== 'actions') {
-                        const cell = document.createElement('td');
-                        cell.textContent = item[key];
-                        row.appendChild(cell);
-                    }
-                }
-                
-                // Add actions cell
-                const actionsCell = document.createElement('td');
-                actionsCell.innerHTML = `
-                    <button class="btn btn-sm btn-outline-primary">View</button>
-                    <button class="btn btn-sm btn-outline-warning">Edit</button>
+                // Create cells for each field
+                row.innerHTML = `
+                    <td>${entry.id || ''}</td>
+                    <td>${entry.term || ''}</td>
+                    <td>${entry.program || ''}</td>
+                    <td>${entry.course || ''}</td>
+                    <td>${entry.assess_type || ''}</td>
+                    <td>${entry.assess_descript || ''}</td>
+                    <td>${entry.ga || ''}</td>
+                    <td>${entry.gai || ''}</td>
+                    <td>${entry.quest_text || ''}</td>
+                    <td>${entry.ga || ''}</td>
+                    <td>${entry.gai || ''}</td>
+                    <td>${entry.alignment || ''}</td>
+                    <td>${entry.assess_title || ''}</td>
+                    <td>${entry.assess_max || ''}</td>
+                    <td>${entry.assess_weight || ''}</td>
+                    <td>${entry.student_id || ''}</td>
+                    <td>${entry.gai_score || ''}</td>
+                    <td>${entry.question_max || ''}</td>
                 `;
-                row.appendChild(actionsCell);
                 
                 tableBody.appendChild(row);
             });

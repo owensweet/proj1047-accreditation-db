@@ -147,40 +147,33 @@ def admin_dashboard_view(request):
     # Get all users except the current admin
     users = User.objects.exclude(id=request.user.id).order_by('username')
     
-    # # For each user, get their last upload date
+    # For each user, get their last upload date
     for user in users:
         try:
             # Assuming we have a model that tracks uploads with a user foreign key and a date field
-            last_upload = Faculty.objects.filter(user=user).order_by('last_uploaded').first()
-            if last_upload:
+            last_upload = Faculty.objects.filter(user=user).order_by('-last_uploaded').first()
+            if last_upload and last_upload.last_uploaded:
                 user.last_upload = last_upload.last_uploaded.strftime('%Y-%m-%d')
             else:
                 user.last_upload = None
         except Exception as e:
-            user.last_upload = e
-
-    database_entries = get_flattened_data
+            user.last_upload = None
     
-    # If a specific table was requested, load that data
-    table_name = request.GET.get('table', 'data_process')
+    # Get flattened data from all tables for the database explorer
+    # Call the function to get the actual data
+    database_entries = get_flattened_data()
     
-    # Normally you would dynamically load the right model data here
-    # For example:
-    # if table_name == 'data_process':
-    #     entries = DataProcess.objects.all()
-    # elif table_name == 'faculty_ci':
-    #     entries = FacultyCI.objects.all()
-    # ... etc.
+    # Take only the first 10 entries for initial display
+    # The rest will be loaded via API pagination
+    display_entries = database_entries[:10] if database_entries else []
     
     context = {
         'users': users,
-        'total_courses': None,  # Sample data
-        'total_faculty': None,  # Sample data
-        'pending_updates': None,  # Sample data
-        'required_actions': None,  # Sample data
-        # 'database_entries': database_entries,
-        'recent_uploads': None,
-        'recent_courses': None,
+        'database_entries': display_entries,
+        'total_courses': len(set(entry.get('course') for entry in database_entries if entry.get('course'))),
+        'total_faculty': len(set(f"{entry.get('instr_first_name')} {entry.get('instr_last_name')}" 
+                             for entry in database_entries 
+                             if entry.get('instr_first_name') and entry.get('instr_last_name'))),
         'activities': [
             {'date': '2023-07-15', 'user': 'johndoe', 'action': 'Uploaded course data'},
             {'date': '2023-07-14', 'user': 'janedoe', 'action': 'Updated faculty records'},
@@ -426,3 +419,59 @@ def analysis_view(request):
     Display the new analytics/analysis dashboard with Tableau visualizations
     """
     return render(request, 'bcit_accreditation/bcit_accred_analysis.html')
+
+@login_required
+@user_passes_test(is_admin)
+def api_data_view(request, table_name):
+    """API endpoint for fetching paginated data for the admin dashboard"""
+    # Get pagination parameters
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 10))
+    sort_by = request.GET.get('sort_by', 'id')
+    sort_order = request.GET.get('sort_order', 'asc')
+    
+    # Calculate offsets for pagination
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    
+    try:
+        # Get all data using the flattened data function
+        all_data = get_flattened_data()
+        total_records = len(all_data)
+        
+        # Custom sorting function to handle different data types
+        def get_sort_key(item):
+            value = item.get(sort_by, '')
+            # Handle None values
+            if value is None:
+                return '' if sort_order == 'asc' else 'zzzzzzzzzz'  # Empty string for asc, high value for desc
+            return value
+        
+        # Sort the data
+        all_data = sorted(all_data, key=get_sort_key, reverse=(sort_order == 'desc'))
+        
+        # Paginate the data
+        paginated_data = all_data[start_idx:end_idx]
+        
+        # Calculate pagination details
+        total_pages = (total_records + page_size - 1) // page_size
+        start_record = start_idx + 1 if paginated_data else 0
+        end_record = start_idx + len(paginated_data)
+        
+        # Prepare the response
+        response_data = {
+            'results': paginated_data,
+            'pagination': {
+                'current_page': page,
+                'total_pages': total_pages,
+                'page_size': page_size,
+                'total_records': total_records,
+                'start_record': start_record,
+                'end_record': end_record
+            }
+        }
+        
+        return JsonResponse(response_data)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

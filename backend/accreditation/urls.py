@@ -26,4 +26,6 @@ urlpatterns = [
     # path('analytics/', views.analytics_view, name='analytics'),
     path('analysis/', views.analysis_view, name='analysis'),
     
+    # API endpoint
+    path('api/data/<str:table_name>/', views.api_data_view, name='api_data'),
 ]
