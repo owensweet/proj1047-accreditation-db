@@ -53,22 +53,21 @@
     
     /* Database view container */
     .database-container {
-        max-height: 600px;
-        overflow-y: auto;
-        border: 1px solid #e0e0e0;
+        max-height: 500px;  /* Fixed height for vertical scrolling */
+        overflow-y: auto;   /* Vertical scrollbar when needed */
+        overflow-x: auto;   /* Horizontal scrollbar when needed */
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        position: relative;  /* For position sticky to work */
+        margin-bottom: 1rem;
     }
     
+    /* Allow table to be wider than container */
     .database-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-    }
-    
-    .database-table th, .database-table td {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 150px; /* Limit column width */
+        width: max-content;  
+        min-width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
     }
     
     .database-table th {
@@ -77,13 +76,20 @@
         z-index: 10;
         background-color: #173d68;
         color: white;
-        padding: 10px;
+        padding: 12px 15px;  /* Increased padding */
         text-align: left;
+        font-weight: bold;
+        white-space: nowrap;  /* Prevent wrapping, remove if causing issues */
+        min-width: 150px;
     }
     
     .database-table td {
-        padding: 8px;
+        padding: 10px 15px;
         border-bottom: 1px solid #e0e0e0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px;
     }
     
     .database-table tr:nth-child(even) {
@@ -288,6 +294,10 @@
         font-size: 16px;
     }
 
+    #database-card {
+        padding: 10px;
+    }
+
 </style>
 {% endblock %}
 
@@ -441,7 +451,7 @@
 
             </div>
 
-            <div class="card mb-4">
+            <div class="card mb-4" id="database-card">
 
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Full Database Explorer</h5>
@@ -458,6 +468,7 @@
                 </div>
 
                 <div class="card-body p-0">
+                    
                     <div class="database-container">
                         <table class="database-table" id="data-table">
                             <thead>
@@ -524,6 +535,7 @@
                             </tbody>
                         </table>
                     </div>
+
                 </div>
 
                 <!-- Add pagination controls -->
