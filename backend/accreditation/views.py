@@ -229,7 +229,7 @@ def csv_upload_view(request):
                             gai_score = int(gai_score_raw)
                             extracted_data.append((student_id, gai_score))
                         except ValueError:
-                            continue  # Skip rows with invalid GAI scores
+                            continue 
                 except IndexError:
                     continue  # Skip incomplete rows
 
@@ -324,8 +324,33 @@ def form_submit_view(request):
     """
     if request.method == 'POST':
         try:
-            # Here we put logic or function refrence to process the form data and save it to the database
+
+            program = request.POST.get("program")
+            course = request.POST.get("course")
+            term = request.POST.get("academicTerm")
+            prog_term = request.POST.get("programTerm")
+            instr_first_name = request.POST.get("facultyFirstName1")
+            instr_last_name = request.POST.get("facultyFirstName2")
+            ga = request.POST.get("graduateAttribute")
+            gai = request.POST.get("graduateAttributeIndicator")
+            instr_level = request.POST.get("instructionalLevel")
+            alignment = request.POST.get("assessmentAlignment")
+            clos = request.POST.get("courseLearningOutcomes")
+            assess_type = request.POST.get("assessmentType")
+            assess_weight = request.POST.get("courseWeighting")
+            assess_max = request.POST.get("assessmentMaxScore")
+            total_score = request.POST.get("assessmentTotalScore")
+            question_max = request.POST.get("gaiMaxPoints")
+            assess_title = request.POST.get("assessmentTitle")
+            assess_descript = request.POST.get("assessmentDescription")
+            quest_text = request.POST.get("questionText")
+            student_id = 
+            gai_score =
+            instr_comments = request.POST.get("assessmentComments")
+
+            # upload_data()
             # For now, just return success
+            print("request: ", request)
             return JsonResponse({
                 'success': True,
                 'message': 'Data saved successfully!'
