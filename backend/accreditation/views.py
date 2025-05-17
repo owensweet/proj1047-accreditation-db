@@ -362,7 +362,7 @@ def form_submit_view(request):
             instr_comments = request.POST.get("assessmentComments")
 
             for student_id, gai_score in extracted_data:
-                upload_data(
+                res = upload_data(
                     program=program,
                     course=course,
                     term=term,
@@ -385,6 +385,10 @@ def form_submit_view(request):
                     instr_comments=instr_comments,
                     student_id=student_id,
                     gai_score=float(gai_score))
+                
+                # if res.get("success") == False:
+                #     print(res.get("message"))
+                #     raise Exception
             
             # Change last_updated field
             faculty = Faculty.objects.get(user=request.user)
