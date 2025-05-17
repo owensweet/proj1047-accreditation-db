@@ -19,6 +19,8 @@ from django.core.exceptions import ValidationError
 import openpyxl
 from .database import *
 from openpyxl.workbook import Workbook
+import json
+from .utils import *
 
 # Import models [NEEDS TO BE CHANGED/DELETED]
 from .models import (
@@ -325,10 +327,23 @@ def form_submit_view(request):
     if request.method == 'POST':
         try:
 
+            # Initial file check
+            if 'csv_file' not in request.FILES:
+                return JsonResponse({'success': False, 'message': 'No CSV file uploaded'})
+
+            # Get data as list of tuples from function in utils.py
+            extracted_data, error = read_csv(request.FILES['csv_file'])
+
+            if error:
+                return JsonResponse({'success': False, 'message': error})
+            
+            if not extracted_data:
+                return JsonResponse({'success': False, 'message': 'No valid student data found in uploaded file'})
+
             program = request.POST.get("program")
             course = request.POST.get("course")
             term = request.POST.get("academicTerm")
-            prog_term = request.POST.get("programTerm")
+            prog_term = int(request.POST.get("programTerm"))
             instr_first_name = request.POST.get("facultyFirstName1")
             instr_last_name = request.POST.get("facultyFirstName2")
             ga = request.POST.get("graduateAttribute")
@@ -337,27 +352,57 @@ def form_submit_view(request):
             alignment = request.POST.get("assessmentAlignment")
             clos = request.POST.get("courseLearningOutcomes")
             assess_type = request.POST.get("assessmentType")
-            assess_weight = request.POST.get("courseWeighting")
+            assess_weight = float(request.POST.get("courseWeighting"))
             assess_max = request.POST.get("assessmentMaxScore")
-            total_score = request.POST.get("assessmentTotalScore")
+            total_score = float(request.POST.get("assessmentTotalScore"))
             question_max = request.POST.get("gaiMaxPoints")
             assess_title = request.POST.get("assessmentTitle")
             assess_descript = request.POST.get("assessmentDescription")
             quest_text = request.POST.get("questionText")
-            student_id = 
-            gai_score =
             instr_comments = request.POST.get("assessmentComments")
 
-            # upload_data()
-            # For now, just return success
+            for student_id, gai_score in extracted_data:
+                upload_data(
+                    program=program,
+                    course=course,
+                    term=term,
+                    prog_term=prog_term,
+                    instr_first_name=instr_first_name,
+                    instr_last_name=instr_last_name,
+                    ga=ga,
+                    gai=gai,
+                    instr_level=instr_level,
+                    alignment=alignment,
+                    clos=clos,
+                    assess_type=assess_type,
+                    assess_weight=assess_weight,
+                    assess_max=int(assess_max),
+                    total_score=total_score,
+                    question_max=int(question_max),
+                    assess_title=assess_title,
+                    assess_descript=assess_descript,
+                    quest_text=quest_text,
+                    instr_comments=instr_comments,
+                    student_id=student_id,
+                    gai_score=float(gai_score))
+            
+            # Change last_updated field
+            faculty = Faculty.objects.get(user=request.user)
+            faculty.last_uploaded = datetime.now()
+            faculty.save()
+            
+            # Return a success
             print("request: ", request)
             return JsonResponse({
                 'success': True,
                 'message': 'Data saved successfully!'
             })
+        
         except Exception as e:
+            import traceback
+            print(traceback.format_exc())
             return JsonResponse({
-                'success': False,
+                'success': False, 
                 'message': f'Error saving data: {str(e)}'
             })
     

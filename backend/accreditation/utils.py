@@ -1,3 +1,7 @@
+import openpyxl
+import io
+import csv
+
 def get_cohort(program_term, academic_term):
     """
     Given a student's academic term and program term, return their cohort academic term.
@@ -40,3 +44,79 @@ def get_achievement_level(gai_score, question_max):
     if question_max == 0:
         raise ValueError("Maximum question score cannot be zero.")
     return round(gai_score / question_max, 2)
+
+def read_csv(uploaded_file):
+    """
+    Process a CSV or XLSX file and extract student data.
+    Returns a list of (student_id, gai_score) tuples.
+    """
+    if not uploaded_file or not hasattr(uploaded_file, 'name'):
+        return [], "Invalid file or no file uploaded"
+        
+    file_name = uploaded_file.name.lower()
+    
+    try:
+        # Convert uploaded file to rows: list of lists
+        if file_name.endswith('.csv'):
+            file_content = uploaded_file.read().decode('utf-8')
+            csvfile = io.StringIO(file_content)
+            rows = list(csv.reader(csvfile))
+
+        elif file_name.endswith('.xlsx'):
+            wb = openpyxl.load_workbook(uploaded_file, data_only=True)
+            sheet = wb.active
+            rows = []
+            for row in sheet.iter_rows(values_only=True):
+                rows.append(list(row))
+        else:
+            return [], "Unsupported file type. Please upload a .csv or .xlsx file."
+
+        # For debugging, print the first few rows
+        print(f"Total rows: {len(rows)}")
+        for i in range(min(5, len(rows))):
+            print(f"Row {i}: {rows[i]}")
+
+        # Extract data starting from row 4 (index 3)
+        extracted_data = []
+        row_count = 0
+        valid_count = 0
+
+        for row in rows[3:]:
+            row_count += 1
+            try:
+                # Handle possible empty rows
+                if not row or len(row) < 3:
+                    continue
+                    
+                student_id = str(row[1]).strip() if row[1] is not None else None
+                gai_score_raw = str(row[2]).strip() if row[2] is not None else None
+
+                # Print for debugging
+                print(f"Processing: ID={student_id}, Score={gai_score_raw}")
+
+                if student_id and len(student_id) == 8:
+                    try:
+                        print("ADDING TO EXTRACTED DATA")
+                        gai_score = int(float(gai_score_raw))  # Handle scores that might be decimal
+                        extracted_data.append((student_id, gai_score))
+                        valid_count += 1
+                    except (ValueError, TypeError):
+                        print(f"Invalid score format: {gai_score_raw}")
+                        continue 
+                else:
+                    print(f"Invalid ID format: {student_id} (length: {len(student_id) if student_id else 0})")
+            except IndexError:
+                print(f"Index error for row: {row}")
+                continue  # Skip incomplete rows
+
+        print(f"Processed {row_count} rows, found {valid_count} valid entries")
+        
+        if not extracted_data:
+            return [], "No valid student data found. Check that your file has student IDs (9 digits) in column B starting from row 4, and numeric scores in column C."
+            
+        return extracted_data, None  # Return data and no error
+    
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        return [], f"Error processing file: {str(e)}"  # Return empty list and error message
