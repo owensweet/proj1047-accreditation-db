@@ -475,3 +475,29 @@ def api_data_view(request, table_name):
     
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+@user_passes_test(is_admin)
+def student_search_api(request):
+    """API endpoint for searching student data by ID"""
+    student_id = request.GET.get('student_id', '')
+    
+    if not student_id:
+        return JsonResponse({'error': 'Student ID is required'}, status=400)
+    
+    try:
+        # Get all data using the flattened data function
+        all_data = get_flattened_data()
+        
+        # Filter data by student ID
+        results = [entry for entry in all_data if entry.get('student_id') == student_id]
+        
+        # Prepare the response
+        response_data = {
+            'results': results
+        }
+        
+        return JsonResponse(response_data)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

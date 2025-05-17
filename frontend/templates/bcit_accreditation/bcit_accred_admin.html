@@ -195,6 +195,99 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    /* Add to your existing style block */
+    .search-container {
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-result-title {
+        font-weight: bold;
+        color: #173d68;
+        border-bottom: 2px solid #173d68;
+        padding-bottom: 8px;
+    }
+
+    .student-result-table {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .student-result-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .student-result-table th {
+        position: sticky;
+        top: 0;
+        background-color: #173d68;
+        color: white;
+        padding: 10px;
+        text-align: left;
+        z-index: 10;
+    }
+
+    .student-result-table td {
+        padding: 8px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .student-result-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .not-found-message {
+        padding: 20px;
+        text-align: center;
+        background-color: #fff3cd;
+        color: #856404;
+        border-radius: 4px;
+        border-left: 4px solid #ffeeba;
+    }
+
+    /* Search button styling */
+    .search-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: inline-flex;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-button:hover {
+        background-color: #0056b3;
+    }
+
+    .search-button i {
+        margin-right: 8px;
+    }
+
+    #searchStudentBtn-container {
+        padding: 10px;
+    }
+
+    #studentIdSearch-container {
+        padding: 10px;
+    }
+
+    #studentIdSearch {
+        width: 75%;
+        font-size: 16px;
+    }
+
 </style>
 {% endblock %}
 
@@ -206,9 +299,11 @@
     <div class="exportbuttoncontainer">
         <h4>Export Data</h4>
         <p>Export all database records to an Excel file for offline analysis.</p>
+
         <a href="{% url 'export' %}" class="export-btn">
             <i class="fas fa-file-export"></i> Export to Excel
         </a>
+
     </div>
     
     <!-- Tab Navigation -->
@@ -219,8 +314,10 @@
     
     <!-- Table Admin Content Container -->
     <div class="tableadmincontent">
+
         <!-- Users Tab Content -->
         <div id="users-tab" class="tab-content active">
+
             <!-- User Management Table -->
             <div class="card mb-4">
 
@@ -261,6 +358,7 @@
 
             <!-- Recent Activities and Admin Tools -->
             <div class="row">
+
                 <div class="col-md-6">
                     <div class="card mb-4">
 
@@ -295,6 +393,7 @@
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
 
@@ -303,6 +402,45 @@
         
         <!-- Database Tab Content -->
         <div id="database-tab" class="tab-content">
+
+            <!-- Add Student ID Search Container -->
+            <div class="search-container card mb-4">
+
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Search by Student ID</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row align-items-end mb-3">
+                        
+                        <div class="col-md-6" id="studentIdSearch-container">
+                            <label for="studentIdSearch" class="form-label">Please enter student ID</label>
+                            <input type="text" id="studentIdSearch" class="form-control" placeholder="e.g. A01234567" 
+                                   pattern="^[A-Za-z][0-9]{8}$" title="Student ID must be a letter followed by 8 digits">
+                        </div>
+
+                        <!-- Improved button with better sizing and padding -->
+                        <div class="col-md-3" id="searchStudentBtn-container">
+                            <button id="searchStudentBtn" class="btn btn-primary w-100 search-button">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Response Container - Initially Hidden -->
+                    <div id="response-container" class="mt-4" style="display: none;">
+                        <h6 class="search-result-title mb-3">Search Results</h6>
+                        <div class="search-result-content">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
             <div class="card mb-4">
 
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -380,7 +518,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="23" class="text-center">No database entries found</td>
+                                        <td colspan="23" class="text-center">No data available</td>
                                     </tr>
                                 {% endif %}
                             </tbody>
@@ -393,11 +531,13 @@
                     <div>
                         <span>Showing <span id="showing-start">1</span>-<span id="showing-end">10</span> of <span id="total-records">0</span> records</span>
                     </div>
+
                     <div>
                         <button id="prev-page" class="btn btn-sm btn-outline-primary" disabled>&laquo; Previous</button>
                         <span id="current-page">Page 1</span>
                         <button id="next-page" class="btn btn-sm btn-outline-primary">Next &raquo;</button>
                     </div>
+
                     <div>
                         <select id="page-size" class="form-select form-select-sm">
                             <option value="10">10 per page</option>
@@ -406,11 +546,17 @@
                             <option value="100">100 per page</option>
                         </select>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -503,6 +649,135 @@
             });
         }
         
+        // Student ID search functionality
+        const studentIdSearch = document.getElementById('studentIdSearch');
+        const searchStudentBtn = document.getElementById('searchStudentBtn');
+        const responseContainer = document.getElementById('response-container');
+
+        // Event listener for the search button
+        searchStudentBtn.addEventListener('click', function() {
+            searchStudentId();
+        });
+
+        // Also search when pressing Enter
+        studentIdSearch.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                searchStudentId();
+            }
+        });
+
+        // Function to validate student ID format
+        function validateStudentId(id) {
+            const pattern = /^[A-Za-z][0-9]{8}$/;
+            return pattern.test(id);
+        }
+
+        // Function to search for student ID
+        function searchStudentId() {
+            const studentId = studentIdSearch.value.trim();
+            
+            // Validate format (letter followed by 8 digits)
+            if (!validateStudentId(studentId)) {
+                alert('Please enter a valid student ID (e.g., A01234567)');
+                studentIdSearch.focus();
+                return;
+            }
+            
+            // Show loading indicator
+            responseContainer.style.display = 'block';
+            const searchResultContent = document.querySelector('.search-result-content');
+            searchResultContent.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Searching...</p></div>';
+            
+            // Making API call to search for the student
+            fetch(`/api/student-search/?student_id=${encodeURIComponent(studentId)}`)
+
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+
+                .then(data => {
+
+                    // Display the results
+                    if (data.results && data.results.length > 0) {
+                        displayStudentResults(data.results);
+                    } else {
+                        searchResultContent.innerHTML = `
+                            <div class="not-found-message">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Student ID "${studentId}" not found in database
+                            </div>
+                        `;
+                    }
+                })
+
+                .catch(error => {
+                    console.error('Error searching for student:', error);
+                    searchResultContent.innerHTML = `
+                        <div class="not-found-message">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Error searching for student. Please try again.
+                        </div>
+                    `;
+                });
+        }
+
+        // Function to display student search results
+        function displayStudentResults(results) {
+            const searchResultContent = document.querySelector('.search-result-content');
+            
+            // Create the table to display results
+            let tableHtml = `
+                <div class="student-result-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Term</th>
+                                <th>Program</th>
+                                <th>Course</th>
+                                <th>Faculty</th>
+                                <th>GA</th>
+                                <th>GAI</th>
+                                <th>Assessment Type</th>
+                                <th>Assessment Title</th>
+                                <th>GAI Score</th>
+                                <th>Total Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for each result
+            results.forEach(entry => {
+                tableHtml += `
+                    <tr>
+                        <td>${entry.student_id || ''}</td>
+                        <td>${entry.term || ''}</td>
+                        <td>${entry.program || ''}</td>
+                        <td>${entry.course || ''}</td>
+                        <td>${entry.instr_first_name || ''} ${entry.instr_last_name || ''}</td>
+                        <td>${entry.ga || ''}</td>
+                        <td>${entry.gai || ''}</td>
+                        <td>${entry.assess_type || ''}</td>
+                        <td>${entry.assess_title || ''}</td>
+                        <td>${entry.gai_score || ''}</td>
+                        <td>${entry.total_score || ''}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            searchResultContent.innerHTML = tableHtml;
+        }
+        
         // Table selector for database tab
         let currentPage = 1;
         let pageSize = 10;
@@ -593,7 +868,7 @@
                     console.error('Error fetching data:', error);
                     hideLoading();
                     document.getElementById('data-table-body').innerHTML = 
-                        '<tr><td colspan="18" class="text-center">Error loading data. Please try again.</td></tr>';
+                        '<tr><td colspan="23" class="text-center">Error loading data. Please try again.</td></tr>';
                 });
         }
 
@@ -642,7 +917,7 @@
             tableBody.innerHTML = '';
             
             if (!data || data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="18" class="text-center">No data available</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="23" class="text-center">No data available</td></tr>';
                 return;
             }
             
@@ -655,28 +930,34 @@
                     <td>${entry.term || ''}</td>
                     <td>${entry.program || ''}</td>
                     <td>${entry.course || ''}</td>
-                    <td>${entry.assess_type || ''}</td>
-                    <td>${entry.assess_descript || ''}</td>
+                    <td>${entry.prog_term || ''}</td>
+                    <td>${entry.instr_first_name || ''}</td>
+                    <td>${entry.instr_last_name || ''}</td>
                     <td>${entry.ga || ''}</td>
                     <td>${entry.gai || ''}</td>
-                    <td>${entry.quest_text || ''}</td>
-                    <td>${entry.ga || ''}</td>
-                    <td>${entry.gai || ''}</td>
+                    <td>${entry.instr_level || ''}</td>
                     <td>${entry.alignment || ''}</td>
-                    <td>${entry.assess_title || ''}</td>
-                    <td>${entry.assess_max || ''}</td>
+                    <td>${entry.clos || ''}</td>
+                    <td>${entry.assess_type || ''}</td>
                     <td>${entry.assess_weight || ''}</td>
-                    <td>${entry.student_id || ''}</td>
-                    <td>${entry.gai_score || ''}</td>
+                    <td>${entry.assess_max || ''}</td>
+                    <td>${entry.total_score || ''}</td>
                     <td>${entry.question_max || ''}</td>
+                    <td>${entry.gai_score || ''}</td>
+                    <td>${entry.assess_title || ''}</td>
+                    <td>${entry.assess_descript || ''}</td>
+                    <td>${entry.quest_text || ''}</td>
+                    <td>${entry.student_id || ''}</td>
+                    <td>${entry.instr_comments || ''}</td>
                 `;
                 
                 tableBody.appendChild(row);
             });
         }
         
-        // Export to Excel functionality
+        // Export to Excel functionality (add e the to function () and uncomment e line for exporting maybe)
         document.getElementById('exportButton').addEventListener('click', function() {
+        //    e.preventDefault(); 
             exportToExcel();
         });
         
@@ -688,7 +969,7 @@
             exportButton.disabled = true;
             
             // In a real implementation, fetch all data to export
-            // For this example, we'll use the currently visible table
+            // For now we'll use the currently visible table
             setTimeout(() => {
                 try {
                     // Determine which table is currently visible

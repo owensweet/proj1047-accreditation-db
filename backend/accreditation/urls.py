@@ -28,4 +28,5 @@ urlpatterns = [
     
     # API endpoint
     path('api/data/<str:table_name>/', views.api_data_view, name='api_data'),
+    path('api/student-search/', views.student_search_api, name='api_student_search'),
 ]
