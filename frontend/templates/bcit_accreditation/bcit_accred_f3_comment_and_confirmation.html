@@ -4,7 +4,27 @@
 {% block title %}Assessment Comments & Confirmation - BCIT Accreditation System{% endblock %}
 
 {% block extra_css %}
+{% load static %}
 <link rel="stylesheet" href="{% static 'css/form3.css' %}">
+<style>
+  .highlight-required {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.8) !important;
+    border: 2px solid #ff0000 !important;
+  }
+  
+  textarea.highlight-required {
+    background-color: rgba(255, 200, 200, 0.3);
+  }
+  
+  .file-upload.highlight-required {
+    background-color: rgba(255, 100, 100, 0.6);
+  }
+  
+  /* Improve the default browser validation message visibility */
+  input:invalid:focus, textarea:invalid:focus {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.6);
+  }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -161,6 +181,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadUserData();
 
+    function checkRequiredFields() {
+        // Remove any existing highlights
+        document.querySelectorAll('.highlight-required').forEach(element => {
+            element.classList.remove('highlight-required');
+        });
+        
+        // Check comment field
+        let allValid = true;
+        if (!commentsField.value.trim()) {
+            commentsField.classList.add('highlight-required');
+            allValid = false;
+        }
+        
+        // Check file input (requires special handling)
+        if (!csvFileInput.files || !csvFileInput.files[0]) {
+            // Highlight the file upload container since we can't highlight the hidden input
+            document.querySelector('.file-upload').classList.add('highlight-required');
+            allValid = false;
+        }
+        
+        return allValid;
+    }
+
     backButton.addEventListener('click', function() {
         const commentData = { assessmentComments: commentsField.value };
         sessionStorage.setItem('f3FormData', JSON.stringify(commentData));
@@ -168,17 +211,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     submitButton.addEventListener('click', function() {
-        if (!commentsField.value.trim()) {
-            alert('Please provide comments on the assessment results');
-            commentsField.focus();
+        // Check all required fields
+        if (!checkRequiredFields()) {
+            // Scroll to the first invalid field
+            const firstInvalid = document.querySelector('.highlight-required');
+            if (firstInvalid) {
+                // If it's the file upload that's invalid
+                if (firstInvalid.classList.contains('file-upload')) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    alert('Please upload an Excel file first');
+                } else {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
             return;
         }
 
-        if (!csvFileInput.files || !csvFileInput.files[0]) {
-            alert('Please upload an Excel file first');
-            return;
-        }
-
+        // Check if we have all required data from previous steps
         const f1Data = JSON.parse(sessionStorage.getItem('f1FormData') || '{}');
         const f2Data = JSON.parse(sessionStorage.getItem('f2FormData') || '{}');
 

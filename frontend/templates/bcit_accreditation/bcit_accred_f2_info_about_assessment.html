@@ -120,9 +120,42 @@
             }
         }
         
+        // Add this function to F2's JavaScript (before the form.addEventListener('submit', ...) code)
+        function checkRequiredFields() {
+            // Remove any existing highlights
+            document.querySelectorAll('.highlight-required').forEach(element => {
+                element.classList.remove('highlight-required');
+            });
+            
+            // Find all required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            let allValid = true;
+            
+            // Check each field
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('highlight-required');
+                    allValid = false;
+                }
+            });
+            
+            return allValid;
+        }
+
         // Handle form submission - store data and navigate to next page
         form.addEventListener('submit', function(event) {
             event.preventDefault();
+            
+            // Check required fields and stop if any are missing
+            if (!checkRequiredFields()) {
+                // Scroll to the first invalid field
+                const firstInvalid = form.querySelector('.highlight-required');
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
             
             // Collect form data
             const formData = {

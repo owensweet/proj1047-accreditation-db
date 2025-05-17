@@ -5,6 +5,22 @@
 {% block extra_css %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/form1.css' %}">
+<style>
+  .highlight-required {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.8) !important;
+    border: 2px solid #ff0000 !important;
+  }
+
+  /* For Firefox which doesn't show box-shadow on select elements */
+  select.highlight-required {
+    background-color: rgba(255, 200, 200, 0.3);
+  }
+  
+  /* Improve the default browser validation message visibility */
+  input:invalid:focus, select:invalid:focus, textarea:invalid:focus {
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.6);
+  }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -249,8 +265,48 @@
       });
     });
 
+    // Function to check all required fields
+    function checkRequiredFields() {
+      // Remove any existing highlights
+      document.querySelectorAll('.highlight-required').forEach(element => {
+        element.classList.remove('highlight-required');
+      });
+      
+      // Find all required fields
+      const requiredFields = form.querySelectorAll('[required]');
+      let allValid = true;
+      
+      // Check each field
+      requiredFields.forEach(field => {
+        if (!field.value) {
+          field.classList.add('highlight-required');
+          allValid = false;
+        }
+        
+        // Special case for select elements
+        if (field.tagName === 'SELECT' && field.selectedIndex === 0) {
+          field.classList.add('highlight-required');
+          allValid = false;
+        }
+      });
+      
+      return allValid;
+    }
+
     form.addEventListener('submit', function(event) {
       event.preventDefault();
+      
+      // Check required fields and stop if any are missing
+      if (!checkRequiredFields()) {
+        // Scroll to the first invalid field
+        const firstInvalid = form.querySelector('.highlight-required');
+        if (firstInvalid) {
+          firstInvalid.focus();
+          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      
       const formData = {};
       const formElements = form.elements;
 
