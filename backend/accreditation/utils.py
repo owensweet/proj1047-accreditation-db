@@ -94,7 +94,7 @@ def read_csv(uploaded_file):
                 # Print for debugging
                 print(f"Processing: ID={student_id}, Score={gai_score_raw}")
 
-                if student_id and len(student_id) == 8:
+                if student_id and len(student_id) == 9:
                     try:
                         print("ADDING TO EXTRACTED DATA")
                         gai_score = int(float(gai_score_raw))  # Handle scores that might be decimal
