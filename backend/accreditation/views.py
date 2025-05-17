@@ -151,13 +151,13 @@ def admin_dashboard_view(request):
     for user in users:
         try:
             # Assuming we have a model that tracks uploads with a user foreign key and a date field
-            last_upload = Faculty.objects.filter(user=user).order_by('-last_uploaded').first()
+            last_upload = Faculty.objects.filter(user=user).order_by('last_uploaded').first()
             if last_upload:
-                user.last_upload = last_upload.upload_date.strftime('%Y-%m-%d')
+                user.last_upload = last_upload.last_uploaded.strftime('%Y-%m-%d')
             else:
                 user.last_upload = None
-        except Exception:
-            user.last_upload = None
+        except Exception as e:
+            user.last_upload = e
 
     database_entries = get_flattened_data
     
